@@ -1,0 +1,291 @@
+---
+title: "Card: Linked Content Blocks with Icons and CTAs"
+sidebarTitle: "Card"
+description: "Navigable content blocks with icons, header images, and CTAs. Cards auto-detect external links, open them in a new tab, and highlight on hover."
+---
+
+Use `Card` when you want to present a piece of content — a guide, an API reference section, a feature overview — as a self-contained, optionally clickable block. Cards support icons, header images, horizontal layouts, and explicit call-to-action labels so you can guide readers to the right destination at a glance.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```jsx
+import { Card } from '@mintlify/components'
+```
+
+## Basic usage
+
+```jsx
+<Card title="API Reference" icon="code" href="/api-reference">
+  Browse every endpoint with full request and response examples.
+</Card>
+```
+
+---
+
+## Props
+
+<ParamField path="title" type="ReactNode">
+  The heading text rendered inside the card. Prefer a plain string for the best accessibility and semantic markup.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode | string">
+  An icon to display above the title (or beside it in horizontal mode). Accepts:
+  - A **string name** from the [Font Awesome](https://fontawesome.com/icons) or [Lucide](https://lucide.dev/icons/) icon sets (e.g. `"bolt"`, `"github"`)
+  - A **URL string** pointing to an SVG or image file
+  - Any **React element** such as `<MyIcon />`
+</ParamField>
+
+<ParamField path="iconType" type="string">
+  Selects the Font Awesome style variant. One of `"regular"` (default), `"solid"`, `"light"`, `"thin"`, `"duotone"`, `"brands"`, `"sharp-solid"`.
+</ParamField>
+
+<ParamField path="iconLibrary" type='"fontawesome" | "lucide"'>
+  The icon library to resolve string icon names against. Defaults to `"fontawesome"`.
+</ParamField>
+
+<ParamField path="color" type="string">
+  A CSS colour value (hex, rgb, named) applied to the icon. Only takes effect when `icon` is a string name resolved through the icon library.
+</ParamField>
+
+<ParamField path="href" type="string">
+  Makes the entire card a link. Pass a relative path (`/guides/quickstart`) for internal navigation or a full URL (`https://example.com`) for external links.
+</ParamField>
+
+<ParamField path="img" type="string">
+  URL of a banner image rendered full-width at the top of the card, above all other content.
+</ParamField>
+
+<ParamField path="horizontal" type="boolean" default="false">
+  When `true`, the icon and content sit side-by-side in a single row instead of stacking vertically. Ideal for compact list-style layouts.
+</ParamField>
+
+<ParamField path="cta" type="string">
+  A call-to-action label shown at the bottom of the card with a right-arrow icon. Draws attention to the primary action without relying solely on the hover state.
+</ParamField>
+
+<ParamField path="arrow" type="boolean">
+  Controls whether the corner arrow icon is shown. Defaults to `true` for external URLs and `false` for internal links. Override explicitly when you need non-default behaviour.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  Disables interactivity. The card renders as a `<div>` instead of `<a>`, ignores `href`, and dims the CTA label.
+</ParamField>
+
+<ParamField path="as" type="ElementType">
+  Replace the underlying element with a custom component — for example, a Next.js `<Link>` or React Router `<NavLink>`. The component receives all standard anchor props including `href`.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the card's outer element.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  Body content rendered below the title. Accepts any React content including inline code, emphasis, and other prose.
+</ParamField>
+
+---
+
+## Examples
+
+### Card with an icon
+
+Place a string icon name in the `icon` prop to pull from Font Awesome. Use `color` to brand the icon to your palette.
+
+```jsx
+<Card
+  title="Webhooks"
+  icon="webhook"
+  color="#7c3aed"
+  href="/webhooks"
+>
+  Subscribe to real-time event notifications for your integration.
+</Card>
+```
+
+### External link with auto-detected arrow
+
+When `href` starts with `https://` or `http://`, the card automatically renders an `ArrowUpRight` icon in the top-right corner and opens the link in a new tab. You don't need to add any extra props.
+
+```jsx
+<Card
+  title="Font Awesome Icons"
+  icon="icons"
+  href="https://fontawesome.com/icons"
+>
+  Browse the full icon set used by the Card component.
+</Card>
+```
+
+<Tip>
+  Pass `arrow={false}` to suppress the external-link arrow when you want a cleaner look and the new-tab behaviour is already obvious from context.
+</Tip>
+
+### Horizontal layout
+
+The `horizontal` prop aligns the icon and content side by side. Use this for navigation menus, quick-link lists, or anywhere vertical space is at a premium.
+
+```jsx
+<Card
+  title="Quickstart"
+  icon="bolt"
+  horizontal
+  href="/quickstart"
+>
+  Get your first API call working in under five minutes.
+</Card>
+
+<Card
+  title="Authentication"
+  icon="lock"
+  horizontal
+  href="/authentication"
+>
+  Learn how to sign requests with API keys and OAuth 2.0.
+</Card>
+```
+
+### Header image
+
+Add a full-width banner image above the card body with the `img` prop.
+
+```jsx
+<Card
+  title="Building a RAG Pipeline"
+  img="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&auto=format&fit=crop"
+  href="/guides/rag-pipeline"
+>
+  Combine retrieval and generation to build context-aware AI features.
+</Card>
+```
+
+### Call-to-action label
+
+Use `cta` to surface the primary action with a visible label and arrow — useful when the card content alone doesn't make the next step obvious.
+
+```jsx
+<Card
+  title="Upgrade your plan"
+  icon="stars"
+  color="#f59e0b"
+  cta="View pricing"
+  href="/pricing"
+>
+  Unlock higher rate limits, priority support, and advanced analytics.
+</Card>
+```
+
+### Disabled card
+
+Set `disabled` to prevent interaction, for example when a feature is coming soon.
+
+```jsx
+<Card
+  title="Team Dashboard"
+  icon="users"
+  cta="Coming soon"
+  disabled
+>
+  Manage workspace members and permissions from a central view.
+</Card>
+```
+
+### Custom icon types and libraries
+
+<Tabs>
+  <Tab title="Font Awesome styles">
+    ```jsx
+    {/* Solid style */}
+    <Card title="Solid icon" icon="star" iconType="solid" href="/docs">
+      Uses the FA solid variant.
+    </Card>
+
+    {/* Brand icon */}
+    <Card title="GitHub" icon="github" iconType="brands" href="https://github.com">
+      Opens the repository in a new tab.
+    </Card>
+    ```
+  </Tab>
+  <Tab title="Lucide icons">
+    ```jsx
+    <Card
+      title="Settings"
+      icon="settings"
+      iconLibrary="lucide"
+      href="/settings"
+    >
+      Manage your account preferences.
+    </Card>
+    ```
+  </Tab>
+  <Tab title="React element icon">
+    ```jsx
+    import { Zap } from 'lucide-react'
+
+    <Card title="Performance" icon={<Zap />} href="/performance">
+      Sub-100 ms response times, globally distributed.
+    </Card>
+    ```
+  </Tab>
+</Tabs>
+
+### Using a custom link component
+
+Pass a framework-native link component via `as` to get client-side navigation without a full page reload.
+
+```jsx
+import Link from 'next/link'
+import { Card } from '@mintlify/components'
+
+<Card
+  as={Link}
+  href="/dashboard"
+  icon="layout-dashboard"
+  iconLibrary="lucide"
+  title="Dashboard"
+>
+  Jump straight to your project overview.
+</Card>
+```
+
+<Note>
+  The `as` prop forwards all anchor props — including `href`, `target`, and `rel` — to your custom component unchanged. Make sure your component accepts standard `<a>` props.
+</Note>
+
+### Card grid
+
+Combine `Card` with [`Columns`](/components/columns) to build responsive grid layouts.
+
+```jsx
+import { Card, Columns } from '@mintlify/components'
+
+<Columns cols={2}>
+  <Card title="Getting Started" icon="rocket" href="/quickstart" cta="Begin">
+    Install the SDK and make your first request.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference" cta="Explore">
+    Full endpoint documentation with live examples.
+  </Card>
+  <Card title="Guides" icon="book-open" href="/guides" cta="Read">
+    Step-by-step tutorials for common use cases.
+  </Card>
+  <Card title="Changelog" icon="clock" href="/changelog" cta="See what's new">
+    Release notes and migration guides.
+  </Card>
+</Columns>
+```
+
+---
+
+## Behaviour notes
+
+**External URL detection** — The card checks whether `href` starts with `http://` or `https://`. When it does, the rendered `<a>` element automatically receives `target="_blank"` and `rel="noreferrer"`, and the `ArrowUpRight` icon appears in the corner. Internal paths (e.g. `/guides/setup`) do not trigger this behaviour.
+
+**Hover state** — When the card has an `href`, hovering highlights the border in your theme's primary colour (`border-primary` / `dark:border-primary-light`). The icon in the corner also transitions to the primary colour, reinforcing that the card is interactive.
+
+**Dark mode** — All colour tokens use Tailwind's `dark:` variant, so the card adapts automatically when the user's system or site theme switches to dark mode. No extra configuration is required.

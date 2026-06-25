@@ -1,20 +1,96 @@
 ---
-title: "Introduction"
-description: "Welcome to your project"
+title: "Mintlify Components: React UI Library for Docs"
+sidebarTitle: "Home"
+description: "Open-source React components for documentation sites. Install from npm, style with Tailwind CSS, and build beautiful docs in minutes."
 ---
 
-Write a short description of your product here. What it does, who it's for, and what they can accomplish with it.
+Welcome to **Mintlify Components** — an open-source React UI library purpose-built for documentation sites. With 22 production-ready components, seamless Tailwind CSS v3/v4 support, and first-class dark mode, you can go from a blank project to a polished docs experience in minutes.
 
-<Tip>
-  Ready to make this your own? Start by editing this page. Update your `docs.json` file to customize your site. Then fill out the [Quickstart](/quickstart) page.
-</Tip>
+<CardGroup cols={2}>
+  <Card
+    title="Introduction"
+    icon="book-open"
+    href="/introduction"
+  >
+    Learn what Mintlify Components is, what's included, and why it's the right
+    choice for your documentation site.
+  </Card>
+  <Card
+    title="Installation"
+    icon="download"
+    href="/installation"
+  >
+    Add `@mintlify/components` to your project and configure Tailwind CSS in
+    under five minutes.
+  </Card>
+  <Card
+    title="Theming"
+    icon="palette"
+    href="/theming"
+  >
+    Override design tokens in Tailwind v3 or v4 to match your brand colors,
+    typography, and spacing.
+  </Card>
+  <Card
+    title="Component Library"
+    icon="rectangle-history"
+    href="/components/accordion"
+  >
+    Browse all 22 components — from Accordion and Callout to Mermaid diagrams
+    and syntax-highlighted CodeBlocks.
+  </Card>
+</CardGroup>
 
-<Card title="Quickstart" icon="rocket" href="/quickstart">
-  This card links to the quickstart page in your project.
-</Card>
-<Card title="Components" icon="puzzle-piece" href="https://mintlify.com/docs/components">
-  Add cards, callouts, steps, tabs, and more to design and structure your pages.
-</Card>
-<Card title="Settings" icon="gear" href="https://mintlify.com/docs/organize/settings">
-  Set your site name, branding, and navigation in the `docs.json` file.
-</Card>
+## Get started in three steps
+
+Follow these steps to install the package, wire up your styles, and render your first component.
+
+<Steps>
+  <Step title="Install the package">
+    Add `@mintlify/components` to your project using your preferred package
+    manager.
+
+    ```bash
+    npm install @mintlify/components
+    ```
+  </Step>
+  <Step title="Set up Tailwind CSS styles">
+    Import the component stylesheet **before** your Tailwind CSS import so that
+    design tokens are available to every component.
+
+    ```css
+    @import "@mintlify/components/styles.css";
+    @import "tailwindcss";
+
+    @theme {
+      --color-primary: #0ea5e9;
+    }
+    ```
+
+    <Note>
+      The `@mintlify/components/styles.css` import must always appear before any
+      Tailwind directive. Reversing the order will cause styles to be overridden
+      incorrectly.
+    </Note>
+  </Step>
+  <Step title="Import and use a component">
+    Import any component directly from the package and drop it into your JSX.
+
+    ```tsx
+    import { Callout, Accordion } from '@mintlify/components';
+
+    export default function Page() {
+      return (
+        <Callout type="info">
+          You just rendered your first Mintlify component!
+        </Callout>
+      );
+    }
+    ```
+
+    <Tip>
+      All components are tree-shakeable — only the components you import will be
+      included in your production bundle.
+    </Tip>
+  </Step>
+</Steps>

@@ -1,23 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "Mintlify Components",
+  "projectType": "sdk-library",
+  "projectName": "Mintlify Components",
+  "projectDescription": "An open-source React UI component library for building beautiful documentation sites, powered by Tailwind CSS.",
   "theme": "willow",
-  "logo": {
-    "light": "https://media.brand.dev/30363f78-348c-426f-ad5b-22224f084909.png",
-    "dark": "https://media.brand.dev/30363f78-348c-426f-ad5b-22224f084909.png"
-  },
-  "favicon": "/favicon.svg",
-  "colors": {
-    "primary": "#40993e",
-    "light": "#183018",
-    "dark": "#e4e8e4"
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/mintlify/components"
-    }
-  },
+  "primaryColor": "#40993e",
+  "lightColor": "#183018",
+  "darkColor": "#e4e8e4",
   "navigation": {
     "tabs": [
       {
@@ -73,5 +61,39 @@
         ]
       }
     ]
-  }
+  },
+  "keyFeatures": [
+    "22 production-ready React components for documentation sites",
+    "Tailwind CSS v3 and v4 support with themeable design tokens",
+    "Syntax-highlighted code blocks powered by Shiki",
+    "Mermaid diagram rendering with pan/zoom controls",
+    "Accessible keyboard navigation (ARIA tree, tabs, accordion)",
+    "Dark mode support out of the box",
+    "Search modal with recent searches and keyboard shortcuts",
+    "Compound component patterns (Accordion.Group, Tabs.Item, Steps.Item, Color.Row/Item, Tree.File/Folder)"
+  ],
+  "publicApiSurface": [
+    "Accordion / Accordion.Group",
+    "Badge",
+    "Callout (+ Info, Warning, Note, Tip, Check, Danger aliases)",
+    "Card",
+    "CodeBlock",
+    "CodeGroup / CodeGroupSelect",
+    "Color / Color.Row / Color.Item",
+    "Columns",
+    "Expandable",
+    "Frame",
+    "Icon",
+    "Mermaid",
+    "Panel",
+    "Property",
+    "Search",
+    "Steps / Steps.Item",
+    "Tabs / Tabs.Item",
+    "Tile",
+    "Tooltip",
+    "Tree / Tree.File / Tree.Folder",
+    "Update",
+    "cn (utility)"
+  ]
 }

@@ -1,0 +1,235 @@
+---
+title: "CodeBlock: Syntax-Highlighted Code Snippets"
+sidebarTitle: "CodeBlock"
+description: "Render syntax-highlighted code with a copy button, optional filename header, line numbers, line highlighting, focus mode, and expandable long snippets."
+---
+
+Use `CodeBlock` to present code samples with full syntax highlighting powered by [Shiki](https://shiki.style). It always includes a copy-to-clipboard button and adapts its appearance to light and dark mode automatically.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { CodeBlock } from '@mintlify/components';
+```
+
+## Basic usage
+
+Pass code as a child string and set the `language` prop to enable syntax highlighting. The copy button appears automatically.
+
+```tsx
+<CodeBlock language="javascript">
+  {`const greeting = 'Hello, world!';
+console.log(greeting);`}
+</CodeBlock>
+```
+
+## Props
+
+<ParamField path="children" type="ReactNode">
+  The code content to display. Pass it as a template literal string child for the cleanest JSX authoring experience.
+</ParamField>
+
+<ParamField path="language" type="string">
+  A [Shiki-supported language identifier](https://shiki.style/languages) (e.g. `"typescript"`, `"python"`, `"bash"`). Omit for plain-text output. Aliases: you can also use the `lang` prop.
+</ParamField>
+
+<ParamField path="lang" type="string">
+  Alias for `language`. When both are provided, `lang` takes precedence.
+</ParamField>
+
+<ParamField path="filename" type="string">
+  Displays a header bar above the code containing the given filename. When present, the copy button moves into this header.
+</ParamField>
+
+<ParamField path="icon" type="string">
+  A brand or file-type icon shown in the header. Requires `filename` or will appear alone. Pass a string icon name (e.g. `"python"`, `"java"`, `"js"`).
+</ParamField>
+
+<ParamField path="lines" type="boolean">
+  Show line numbers in the gutter. Defaults to `false`.
+</ParamField>
+
+<ParamField path="wrap" type="boolean">
+  Wrap long lines instead of scrolling horizontally. Defaults to `false`.
+</ParamField>
+
+<ParamField path="expandable" type="boolean">
+  Collapse tall code blocks with a "Show more" button. Useful for long snippets that would push other content off-screen.
+</ParamField>
+
+<ParamField path="highlight" type="string">
+  JSON-stringified array of line numbers to highlight with a colored background. Example: `"[1,3,4,5]"`.
+</ParamField>
+
+<ParamField path="focus" type="string">
+  JSON-stringified array of line numbers to keep at full opacity. All other lines are dimmed. Example: `"[2,4,6]"`. Can be combined with `highlight`.
+</ParamField>
+
+<ParamField path="codeBlockTheme" type='"system" | "dark"' default='"system"'>
+  Controls the overall UI chrome (background, border, button colors). `"system"` adapts to the user's light/dark OS preference; `"dark"` forces the dark UI regardless of system setting.
+</ParamField>
+
+<ParamField path="askAiButton" type="ReactNode">
+  A React node injected into the header or floating button area. Use this to render an "Ask AI" action button wired to your AI provider.
+</ParamField>
+
+<ParamField path="feedbackButton" type="ReactNode">
+  A React node injected alongside the copy button. Use it to add a thumbs-up/thumbs-down feedback widget.
+</ParamField>
+
+<ParamField path="copyButtonProps" type="CopyToClipboardButtonProps">
+  Additional props forwarded to the built-in copy button. Useful for overriding button styles or disabling the button.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outer wrapper.
+</ParamField>
+
+## Examples
+
+### With filename and icon
+
+Providing a `filename` adds a header bar. Adding `icon` shows a file-type icon in that header.
+
+```tsx
+<CodeBlock filename="server.ts" icon="typescript" language="typescript">
+  {`import express from 'express';
+
+const app = express();
+app.listen(3000, () => console.log('Listening on :3000'));`}
+</CodeBlock>
+```
+
+### With line numbers
+
+Enable `lines` to show a numbered gutter — helpful for code blocks you reference by line number in prose.
+
+```tsx
+<CodeBlock language="python" filename="train.py" lines={true}>
+  {`import torch
+import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Linear(784, 256),
+    nn.ReLU(),
+    nn.Linear(256, 10),
+)
+
+output = model(torch.randn(32, 784))
+print(output.shape)`}
+</CodeBlock>
+```
+
+### Highlighting specific lines
+
+Use `highlight` to draw attention to the lines that matter most. Pass a JSON-stringified array of line numbers.
+
+```tsx
+<CodeBlock
+  language="javascript"
+  filename="config.js"
+  highlight={JSON.stringify([3, 4, 5])}
+  lines={true}
+>
+  {`module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js',
+  },
+};`}
+</CodeBlock>
+```
+
+### Focus mode
+
+Use `focus` to dim all lines except the ones you want to explain. Combine it with `highlight` to both dim and highlight simultaneously.
+
+```tsx
+<CodeBlock
+  language="go"
+  filename="handler.go"
+  focus={JSON.stringify([5, 6, 7])}
+  lines={true}
+>
+  {`package main
+
+import "net/http"
+
+func handler(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte("OK"))
+}
+
+func main() {
+    http.HandleFunc("/", handler)
+    http.ListenAndServe(":8080", nil)
+}`}
+</CodeBlock>
+```
+
+### Expandable long snippets
+
+For long reference code you don't want to truncate, use `expandable`. The block renders collapsed at a fixed height with a "Show more" button.
+
+```tsx
+<CodeBlock
+  language="python"
+  filename="utils.py"
+  expandable={true}
+  lines={true}
+>
+  {`# ... many lines of code ...`}
+</CodeBlock>
+```
+
+### Wrapping long lines
+
+When a single line is very long (e.g. a shell command or a generated URL), set `wrap={true}` to soft-wrap instead of showing a horizontal scrollbar.
+
+```tsx
+<CodeBlock language="bash" wrap={true}>
+  {`curl -X POST https://api.example.com/v1/completions -H "Authorization: Bearer $API_KEY" -H "Content-Type: application/json" -d '{"model":"gpt-4o","messages":[{"role":"user","content":"Hello"}]}'`}
+</CodeBlock>
+```
+
+### Forced dark theme
+
+Set `codeBlockTheme="dark"` to always render the dark UI, even on a light-mode page — a common choice for marketing sites where code blocks serve as design elements.
+
+```tsx
+<CodeBlock language="typescript" filename="index.ts" codeBlockTheme="dark">
+  {`export default function hello(): string {
+  return 'Hello, Mintlify!';
+}`}
+</CodeBlock>
+```
+
+## Header behavior
+
+The header bar (containing the filename, icon, and copy button) only renders when you provide at least one of `filename` or `icon`. When neither is set, the copy button floats as an overlay in the top-right corner of the block.
+
+## Copy button
+
+Every `CodeBlock` automatically extracts the code text from its children and wires it to the clipboard. You don't need to manage the copy action yourself. Use `copyButtonProps` if you need to customise the button's appearance or behaviour.
+
+## Diff highlighting
+
+Lines prefixed with `+` or `-` inside a code block automatically receive diff-style coloring — green for additions, red for removals — without any extra props.
+
+```tsx
+<CodeBlock language="javascript" filename="app.js">
+  {`- const port = 3000;
++ const port = process.env.PORT ?? 3000;`}
+</CodeBlock>
+```
+
+## Dark mode
+
+`CodeBlock` with `codeBlockTheme="system"` (the default) uses Tailwind `dark:` classes throughout. The syntax highlighting theme also switches between a light and dark palette automatically.

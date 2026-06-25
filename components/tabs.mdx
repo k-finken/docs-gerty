@@ -1,0 +1,250 @@
+---
+title: "Tabs: Accessible Tabbed Content Sections"
+sidebarTitle: "Tabs"
+description: "Organize related content into accessible tabbed panels with full keyboard navigation, ARIA roles, optional icons, and a configurable default active tab."
+---
+
+Use `Tabs` when you have several views of the same topic — platform variants, operating systems, pricing tiers, or any set of mutually exclusive content that readers switch between contextually.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Tabs } from '@mintlify/components';
+```
+
+## Basic usage
+
+Wrap `Tabs.Item` components inside `Tabs`. Set the `title` prop on each item to label its tab. Only the active panel's content is rendered.
+
+```tsx
+<Tabs>
+  <Tabs.Item title="macOS">
+    Install via Homebrew: `brew install mintlify`
+  </Tabs.Item>
+  <Tabs.Item title="Windows">
+    Download the installer from the [releases page](https://github.com/mintlify/cli/releases).
+  </Tabs.Item>
+  <Tabs.Item title="Linux">
+    Install via npm: `npm install -g @mintlify/cli`
+  </Tabs.Item>
+</Tabs>
+```
+
+## Props
+
+### Tabs
+
+<ParamField path="children" type="ReactElement<TabsItemProps> | ReactElement<TabsItemProps>[]" required>
+  One or more `Tabs.Item` components. Invalid children (non-elements) are filtered out automatically.
+</ParamField>
+
+<ParamField path="defaultTabIndex" type="number" default="0">
+  Zero-based index of the tab to activate on first render. Clamped to the valid range if out of bounds.
+</ParamField>
+
+<ParamField path="onTabChange" type="(tabIndex: number) => void">
+  Callback fired whenever the active tab changes. Receives the zero-based index of the newly active tab. Use this for analytics or to synchronize state outside the component.
+</ParamField>
+
+<ParamField path="borderBottom" type="boolean">
+  Add a bottom border to the entire tab container, creating visual separation from the content below.
+</ParamField>
+
+<ParamField path="ariaLabel" type="string" default='"Tabs"'>
+  Accessible label for the `role="tablist"` element. Override this when you have multiple tab groups on the same page.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outermost container.
+</ParamField>
+
+### Tabs.Item
+
+<ParamField path="title" type="string" required>
+  The label text displayed in the tab button. Also used to generate the item's ID when no explicit `id` is provided.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The panel content shown when this tab is active. Supports any rich content.
+</ParamField>
+
+<ParamField path="id" type="string">
+  Custom ID for the tab and its panel. When omitted, an ID is generated from the `title` slug. Providing a stable `id` is useful when you reference tabs programmatically.
+</ParamField>
+
+<ParamField path="icon" type="string">
+  A FontAwesome icon name displayed to the left of the title inside the tab button.
+</ParamField>
+
+<ParamField path="iconType" type='"solid" | "regular" | "brands" | "duotone" | "light" | "thin"'>
+  FontAwesome icon style. Only used when `icon` is provided.
+</ParamField>
+
+<ParamField path="iconLibrary" type='"fontawesome" | "lucide"'>
+  Icon library to use for the `icon` string. Defaults to FontAwesome.
+</ParamField>
+
+## Examples
+
+### With icons
+
+Add an `icon` to each `Tabs.Item` to make the tab bar scannable at a glance.
+
+```tsx
+<Tabs>
+  <Tabs.Item title="Overview" icon="house" iconType="solid">
+    The overview explains the high-level architecture of the system.
+  </Tabs.Item>
+  <Tabs.Item title="API Reference" icon="code" iconType="solid">
+    Full endpoint documentation with request and response schemas.
+  </Tabs.Item>
+  <Tabs.Item title="Changelog" icon="clock-rotate-left" iconType="solid">
+    A history of all breaking and non-breaking changes.
+  </Tabs.Item>
+</Tabs>
+```
+
+### Default to a specific tab
+
+Set `defaultTabIndex` to open a tab other than the first. This is a zero-based index.
+
+```tsx
+<Tabs defaultTabIndex={2}>
+  <Tabs.Item title="Starter">
+    $0 / month — up to 1,000 page views.
+  </Tabs.Item>
+  <Tabs.Item title="Pro">
+    $49 / month — up to 100,000 page views.
+  </Tabs.Item>
+  <Tabs.Item title="Enterprise">
+    Custom pricing — unlimited page views and dedicated support.
+  </Tabs.Item>
+</Tabs>
+```
+
+### Rich panel content
+
+Tab panels support the full range of Mintlify components — code blocks, callouts, steps, and nested tabs.
+
+<Tabs>
+  <Tabs.Item title="Node.js">
+    Install the SDK:
+
+    ```bash
+    npm install @acme/sdk
+    ```
+
+    Then initialize the client:
+
+    ```javascript
+    import { AcmeClient } from '@acme/sdk';
+
+    const client = new AcmeClient({ apiKey: process.env.ACME_API_KEY });
+    ```
+
+    <Note>
+      Store your API key in an environment variable — never hard-code it.
+    </Note>
+  </Tabs.Item>
+
+  <Tabs.Item title="Python">
+    Install the SDK:
+
+    ```bash
+    pip install acme-sdk
+    ```
+
+    Then initialize the client:
+
+    ```python
+    from acme import AcmeClient
+    import os
+
+    client = AcmeClient(api_key=os.environ["ACME_API_KEY"])
+    ```
+  </Tabs.Item>
+
+  <Tabs.Item title="Go">
+    ```bash
+    go get github.com/acme/acme-go
+    ```
+
+    ```go
+    client := acme.NewClient(os.Getenv("ACME_API_KEY"))
+    ```
+  </Tabs.Item>
+</Tabs>
+
+### Reacting to tab changes
+
+Use `onTabChange` to fire a callback whenever the reader switches tabs — for analytics events or to sync state with another component.
+
+```tsx
+<Tabs onTabChange={(index) => analytics.track('tab_viewed', { index })}>
+  <Tabs.Item title="REST">
+    Documentation for the REST API.
+  </Tabs.Item>
+  <Tabs.Item title="GraphQL">
+    Documentation for the GraphQL API.
+  </Tabs.Item>
+  <Tabs.Item title="WebSocket">
+    Documentation for the real-time WebSocket API.
+  </Tabs.Item>
+</Tabs>
+```
+
+### With border bottom
+
+Add a visual separator between the tab bar and the content below using `borderBottom`.
+
+```tsx
+<Tabs borderBottom>
+  <Tabs.Item title="Request">
+    The request body must include `model` and `messages`.
+  </Tabs.Item>
+  <Tabs.Item title="Response">
+    A successful response returns a `200 OK` with a JSON body.
+  </Tabs.Item>
+</Tabs>
+```
+
+### Multiple accessible tab groups
+
+When a page has more than one `Tabs` component, set a unique `ariaLabel` on each so screen reader users can distinguish between them.
+
+```tsx
+<Tabs ariaLabel="Installation options">
+  <Tabs.Item title="npm">Install via npm.</Tabs.Item>
+  <Tabs.Item title="yarn">Install via Yarn.</Tabs.Item>
+</Tabs>
+
+<Tabs ariaLabel="Framework guides">
+  <Tabs.Item title="React">React integration guide.</Tabs.Item>
+  <Tabs.Item title="Vue">Vue integration guide.</Tabs.Item>
+</Tabs>
+```
+
+## Keyboard navigation
+
+`Tabs` implements the [ARIA Tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) in full:
+
+| Key | Action |
+| --- | --- |
+| `←` / `→` | Move focus to the previous / next tab |
+| `Home` | Move focus to the first tab |
+| `End` | Move focus to the last tab |
+| `Enter` / `Space` | Activate the focused tab |
+
+## Accessibility
+
+Each tab button renders with `role="tab"` and `aria-selected`. The active panel uses `role="tabpanel"` with `aria-labelledby` pointing back to its tab button. Hidden panels receive `aria-hidden="true"` and `tabIndex={-1}` so they are skipped by assistive technology.
+
+## Dark mode
+
+Tab buttons, borders, and active indicators all use Tailwind `dark:` classes. The component adapts automatically when your site switches themes.

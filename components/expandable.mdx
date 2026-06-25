@@ -1,0 +1,210 @@
+---
+title: "Expandable: Collapsible Content Sections"
+sidebarTitle: "Expandable"
+description: "Collapse and reveal content sections progressively, with session-storage persistence, lazy rendering, anchor-based auto-opening, and fully customizable labels."
+---
+
+Use the `Expandable` component to hide supplementary content — such as child API properties, extended examples, or optional configuration — behind a toggle. It keeps your pages scannable while still making all details available on demand.
+
+The component is built on the native `<details>` and `<summary>` HTML elements, which means it is fully accessible and works without JavaScript for the initial paint.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Expandable } from '@mintlify/components';
+```
+
+## Basic Usage
+
+```tsx
+<Expandable title="Child attributes">
+  These nested fields appear when the section is expanded.
+</Expandable>
+```
+
+---
+
+## Props
+
+<ParamField path="title" type="string">
+  The label displayed in the toggle header. Defaults to `"child attributes"`.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  When `true`, the section is expanded on first render. Defaults to `false`.
+</ParamField>
+
+<ParamField path="onChange" type="(open: boolean) => void">
+  Callback invoked whenever the open state changes. Receives the new boolean state.
+</ParamField>
+
+<ParamField path="onOpen" type="() => void">
+  Callback invoked when the section opens.
+</ParamField>
+
+<ParamField path="onClose" type="() => void">
+  Callback invoked when the section closes.
+</ParamField>
+
+<ParamField path="onMount" type="(open: boolean) => void">
+  Callback invoked once on mount with the initial open state.
+</ParamField>
+
+<ParamField path="lazy" type="boolean">
+  When `true`, the children are not rendered until the section is opened for the first time. Useful for expensive subtrees. Defaults to `false`.
+</ParamField>
+
+<ParamField path="uniqueParamId" type="string">
+  A stable identifier used to persist the open/closed state in `sessionStorage`. When the user reopens the page in the same session, the section restores its last state.
+</ParamField>
+
+<ParamField path="anchor" type="string">
+  An anchor string. When the page URL contains a matching hash, the section automatically opens.
+</ParamField>
+
+<ParamField path="openedText" type="string">
+  The action text shown when the section is open (e.g. to indicate clicking will close it). Defaults to `"Hide"`.
+</ParamField>
+
+<ParamField path="closedText" type="string">
+  The action text shown when the section is closed (e.g. to indicate clicking will open it). Defaults to `"Show"`.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content revealed when the section is expanded.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names to apply to the container element.
+</ParamField>
+
+---
+
+## Examples
+
+### Default Title
+
+When you omit `title`, the component falls back to `"child attributes"` — ideal for nesting child parameter blocks inside API reference pages:
+
+```tsx
+<Expandable>
+  <ParamField path="metadata.key" type="string">
+    An arbitrary key in the metadata map.
+  </ParamField>
+  <ParamField path="metadata.value" type="string">
+    The value associated with the key.
+  </ParamField>
+</Expandable>
+```
+
+### Custom Toggle Labels
+
+Override the show/hide action text with `openedText` and `closedText`:
+
+```tsx
+<Expandable
+  title="Advanced configuration"
+  openedText="Collapse"
+  closedText="Expand"
+>
+  Advanced configuration options live here.
+</Expandable>
+```
+
+### Open by Default
+
+```tsx
+<Expandable title="Response fields" defaultOpen>
+  These fields are visible immediately on page load.
+</Expandable>
+```
+
+### Session Storage Persistence
+
+Set `uniqueParamId` to a stable identifier so the component remembers the user's preference within the browser session:
+
+```tsx
+<Expandable
+  title="Request headers"
+  uniqueParamId="request-headers-section"
+>
+  Authorization, Content-Type, and other request headers.
+</Expandable>
+```
+
+<Note>
+  Session storage is scoped to the browser tab. The state resets when the user opens a new tab or closes the browser.
+</Note>
+
+### Lazy Rendering
+
+Use `lazy` when the content inside is expensive to mount. The children will not be rendered until the section is opened for the first time:
+
+```tsx
+<Expandable title="Large data table" lazy>
+  <HeavyDataTable rows={rows} />
+</Expandable>
+```
+
+### Anchor-Based Auto-Opening
+
+Pass an `anchor` string to automatically open the section when the page URL hash matches. This is useful for deep-linking to a specific nested field:
+
+```tsx
+// Opens automatically when the URL contains #webhook-payload
+<Expandable title="Webhook payload" anchor="webhook-payload">
+  Detailed breakdown of the webhook event body.
+</Expandable>
+```
+
+### Change Callback
+
+React to open/close events with `onChange`, `onOpen`, or `onClose`:
+
+```tsx
+<Expandable
+  title="Billing details"
+  onChange={(isOpen) => console.log('Section is now:', isOpen ? 'open' : 'closed')}
+  onOpen={() => trackEvent('billing_details_expanded')}
+>
+  Billing address and payment method fields.
+</Expandable>
+```
+
+---
+
+## Typical API Reference Pattern
+
+The most common use case is nesting child parameter fields inside a parent parameter description:
+
+```tsx
+<ParamField path="address" type="object">
+  The recipient's mailing address.
+
+  <Expandable title="address fields">
+    <ParamField path="address.line1" type="string" required>
+      Street address, apartment, or suite number.
+    </ParamField>
+    <ParamField path="address.city" type="string" required>
+      City name.
+    </ParamField>
+    <ParamField path="address.country" type="string" required>
+      ISO 3166-1 alpha-2 country code.
+    </ParamField>
+  </Expandable>
+</ParamField>
+```
+
+---
+
+## Accessibility
+
+- Built on native `<details>` / `<summary>` elements, which are keyboard-accessible and announced correctly by screen readers without any additional ARIA attributes.
+- The `<summary>` element receives focus and can be toggled with <kbd>Enter</kbd> or <kbd>Space</kbd>.
+- When `lazy` is enabled, content is only added to the DOM after the first open — screen readers will announce the content naturally once it exists.

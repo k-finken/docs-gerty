@@ -1,0 +1,241 @@
+---
+title: "Contribute to Mintlify Components Open Source"
+sidebarTitle: "Contributing"
+description: "Learn how to contribute to the @mintlify/components open-source library — filing issues, submitting pull requests, and running locally."
+---
+
+`@mintlify/components` is an open-source React component library and we welcome contributions of all kinds — from a one-line typo fix to a brand-new component. This guide explains how to report issues, set up a local development environment, and submit a pull request that will get merged quickly.
+
+<Note>
+  By contributing you agree that your work will be licensed under the [MIT License](https://github.com/mintlify/components/blob/main/LICENSE), the same license that covers the rest of the project.
+</Note>
+
+---
+
+## Filing issues
+
+Before you open a new issue, search the [existing issues](https://github.com/mintlify/components/issues) to avoid duplicates. We triage work using three labels:
+
+| Label | When to use it |
+|---|---|
+| `bug` | Something isn't working as expected |
+| `improvement` | An enhancement to an existing component |
+| `feature request` | A request for an entirely new component or capability |
+
+### Reporting a bug
+
+1. Open a [bug report](https://github.com/mintlify/components/issues/new?template=bug_report.md) using the template.
+2. Fill in the reproduction steps, the behavior you expected, and what actually happened.
+3. Attach screenshots or a minimal code snippet — the more context, the faster the fix.
+
+### Requesting a feature or improvement
+
+1. Open a [feature request](https://github.com/mintlify/components/issues/new?template=feature_request.md) using the template.
+2. Describe your use case and explain why the addition would be broadly valuable.
+3. For enhancements to an existing component, add the `improvement` label.
+
+---
+
+## Local development setup
+
+### Prerequisites
+
+You need the following tools installed before you begin:
+
+- **Node.js** ≥ 20.0.0 — [nodejs.org](https://nodejs.org/)
+- **pnpm** ≥ 10.0.0 — [pnpm.io](https://pnpm.io/)
+
+### Steps
+
+<Steps>
+  <Step title="Fork and clone the repository">
+    Fork [mintlify/components](https://github.com/mintlify/components) on GitHub, then clone your fork locally:
+
+    ```bash
+    git clone https://github.com/<your-username>/components.git
+    cd components
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    ```bash
+    pnpm install
+    ```
+  </Step>
+
+  <Step title="Set up pre-commit hooks">
+    ```bash
+    pnpm exec husky install
+    ```
+
+    This installs [Husky](https://typicode.github.io/husky/) so that linting runs automatically before every commit.
+  </Step>
+
+  <Step title="Start Storybook">
+    ```bash
+    pnpm storybook
+    ```
+
+    Storybook starts a local dev server at `http://localhost:6006`. Every component has interactive stories you can use while developing.
+
+    <Tip>
+      Need to iterate on the compiled library itself rather than Storybook? Run `pnpm dev` instead to start the build in watch mode.
+    </Tip>
+  </Step>
+
+  <Step title="Verify the build">
+    Before opening a PR, confirm that the package builds successfully:
+
+    ```bash
+    pnpm build
+    ```
+  </Step>
+</Steps>
+
+---
+
+## Project structure
+
+```
+packages/
+└── components/           # Main component package
+    ├── src/
+    │   ├── components/   # React components
+    │   ├── hooks/        # Custom React hooks
+    │   ├── utils/        # Utility functions
+    │   └── index.ts      # Package entry point
+    ├── .storybook/       # Storybook configuration
+    └── dist/             # Build output (generated)
+```
+
+---
+
+## Adding a new component
+
+<Steps>
+  <Step title="Create the component directory">
+    Add a new folder under `packages/components/src/components/` named after your component.
+  </Step>
+
+  <Step title="Implement the component in TypeScript">
+    Use TypeScript for all source files. Make sure you export any public types so consumers get full type safety.
+  </Step>
+
+  <Step title="Export from the entry point">
+    Add your component export to `packages/components/src/components/index.ts`.
+  </Step>
+
+  <Step title="Write a Storybook story">
+    Document usage with at least one story under `packages/components/.storybook/`. Stories double as interactive demos and regression-test fixtures.
+  </Step>
+
+  <Step title="Build and verify">
+    ```bash
+    pnpm build
+    ```
+
+    Fix any TypeScript or bundling errors before pushing.
+  </Step>
+</Steps>
+
+### Component guidelines
+
+Keep the following in mind when building or modifying components:
+
+<Accordion title="React compatibility">
+  All components must be compatible with **React 18 and React 19**.
+</Accordion>
+
+<Accordion title="Theming">
+  Components must support both **light and dark themes** using the existing Tailwind CSS design tokens.
+</Accordion>
+
+<Accordion title="Accessibility">
+  Include appropriate ARIA attributes and ensure full **keyboard navigation** support.
+</Accordion>
+
+<Accordion title="Styling">
+  Use **Tailwind CSS** for all styles and prefer canonical Tailwind utility classes over custom CSS where possible.
+</Accordion>
+
+---
+
+## Submitting a pull request
+
+<Steps>
+  <Step title="Create a branch from main">
+    ```bash
+    git checkout -b feat/my-change
+    ```
+
+    Keep your branch focused on a single logical change.
+  </Step>
+
+  <Step title="Make your changes">
+    Follow the code style guidelines in the next section. Update or add Storybook stories to cover any new behavior.
+  </Step>
+
+  <Step title="Lint and build">
+    <CodeGroup>
+      ```bash Check linting
+      pnpm lint:check
+      ```
+
+      ```bash Fix automatically
+      pnpm lint:fix
+      ```
+
+      ```bash Build
+      pnpm build
+      ```
+    </CodeGroup>
+
+    All three commands should exit cleanly before you push.
+  </Step>
+
+  <Step title="Open the pull request">
+    Push your branch and open a PR against `main` on [github.com/mintlify/components](https://github.com/mintlify/components). The PR template has **Summary** and **Test Plan** sections — fill both out. Keep your PR description clear and concise so reviewers can understand the change at a glance.
+  </Step>
+</Steps>
+
+### PR checklist
+
+- [ ] Branch is up to date with `main`
+- [ ] `pnpm lint:check` passes
+- [ ] `pnpm build` succeeds
+- [ ] Storybook stories added or updated
+- [ ] PR description has a Summary and a Test Plan
+- [ ] All CI checks pass
+
+---
+
+## Code style
+
+`@mintlify/components` uses [Biome](https://biomejs.dev/) for linting and formatting — the same tool that runs in the pre-commit hook.
+
+```bash
+# Check for issues without modifying files
+pnpm lint:check
+
+# Auto-fix everything Biome can fix
+pnpm lint:fix
+```
+
+<Note>
+  You don't need to memorize every style rule. Run `pnpm lint:fix` before committing and the pre-commit hook will catch anything left.
+</Note>
+
+Beyond formatting, keep these conventions in mind:
+
+- Write all source code in **TypeScript**.
+- Follow the patterns established in the existing components.
+- Use **Tailwind CSS** classes for styling rather than inline styles or custom CSS files.
+
+---
+
+## Questions?
+
+If something isn't covered here, you have two great options:
+
+- Open a [GitHub Discussion](https://github.com/mintlify/components/discussions) for open-ended questions.
+- Browse the [Mintlify documentation](https://www.mintlify.com/docs/components) for usage examples.

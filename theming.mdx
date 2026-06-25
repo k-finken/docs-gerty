@@ -1,0 +1,186 @@
+---
+title: "Customize Mintlify Components with Tailwind Themes"
+sidebarTitle: "Theming"
+description: "Override design tokens in Tailwind CSS v3 or v4 to customize colors, typography, and spacing across all Mintlify components."
+---
+
+Mintlify Components is styled entirely through Tailwind CSS design tokens and CSS custom properties, which means you can restyle every component by overriding a handful of variables — no component source code changes required. This page shows you exactly which tokens to override and how to do it in both Tailwind v4 and v3.
+
+## How theming works
+
+Each component reads from a shared set of CSS custom properties defined in `@mintlify/components/styles.css`. When you set your own values for those properties — either in a Tailwind `@theme {}` block (v4) or in `tailwind.config.js` (v3) — your values take precedence and propagate to every component automatically.
+
+<Note>
+  Always import `@mintlify/components/styles.css` **before** any Tailwind CSS
+  import. This ensures the library's baseline tokens are available and your
+  overrides cascade on top of them correctly.
+</Note>
+
+## Tailwind CSS v4
+
+In Tailwind v4, define your design tokens inside an `@theme {}` block in your global CSS file. The most important token is `--color-primary`, which controls primary buttons, active links, focus rings, and other interactive accents across all components.
+
+```css
+@import "@mintlify/components/styles.css";
+@import "tailwindcss";
+
+@theme {
+  /* Brand primary color */
+  --color-primary: #0ea5e9;
+}
+```
+
+<Tip>
+  Your `--color-primary` value affects primary buttons, link hover states,
+  focus rings, and interactive component highlights all at once. Choose a color
+  with enough contrast against both light and dark backgrounds.
+</Tip>
+
+### Extended v4 example
+
+The following example demonstrates a fuller set of token overrides using a custom purple brand palette.
+
+```css
+@import "@mintlify/components/styles.css";
+@import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-primary: #7c3aed;
+
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+```
+
+## Tailwind CSS v3
+
+In Tailwind v3, override design tokens through the `theme.extend` key in `tailwind.config.js`. Adding a `primary` color here injects it into Tailwind's full color scale, making it available as `text-primary`, `bg-primary`, `border-primary`, and so on throughout your project.
+
+```js tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#7c3aed',
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+Your global CSS file should still import the component stylesheet before the Tailwind directives:
+
+```css
+@import "@mintlify/components/styles.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## Dark mode
+
+All Mintlify Components use Tailwind's `dark:` variant internally. To enable dark mode across your site, set the `darkMode` strategy in your Tailwind config (v3) or rely on the media-query default (v4) — no additional component configuration is needed.
+
+<Tabs>
+  <Tab title="Tailwind CSS v4">
+    Tailwind v4 uses the `prefers-color-scheme` media query by default. No
+    extra configuration is required — components adapt automatically when the
+    user's OS is set to dark mode.
+
+    To support a manual dark mode toggle (e.g. a class on `<html>`), add the
+    following to your CSS:
+
+    ```css
+    @import "@mintlify/components/styles.css";
+    @import "tailwindcss";
+
+    @variant dark (&:where(.dark, .dark *));
+
+    @theme {
+      --color-primary: #0ea5e9;
+    }
+    ```
+  </Tab>
+
+  <Tab title="Tailwind CSS v3">
+    Add `darkMode: 'class'` to your `tailwind.config.js` to enable toggling
+    dark mode by adding the `dark` class to the `<html>` element.
+
+    ```js tailwind.config.js
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9',
+          },
+        },
+      },
+      plugins: [],
+    };
+    ```
+
+    Then toggle dark mode in JavaScript by adding or removing the `dark` class
+    on `document.documentElement`.
+  </Tab>
+</Tabs>
+
+## Minimal working example
+
+The following shows a complete, copy-paste-ready setup combining installation, CSS configuration, and a themed component for Tailwind v4.
+
+**1. Install the package**
+
+```bash
+npm install @mintlify/components
+```
+
+**2. Configure your global CSS**
+
+```css globals.css
+@import "@mintlify/components/styles.css";
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7c3aed;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+**3. Use a themed component**
+
+```tsx app/page.tsx
+import { Callout, Card } from '@mintlify/components';
+
+export default function Page() {
+  return (
+    <main>
+      <Callout type="tip">
+        Your primary color is now purple across every component!
+      </Callout>
+
+      <Card title="Themed Card" icon="palette" href="/theming">
+        This card's interactive states use your custom primary color.
+      </Card>
+    </main>
+  );
+}
+```
+
+<Tip>
+  When you update `--color-primary` (or the v3 `colors.primary` value), all
+  components that reference the primary color — buttons, links, focus rings,
+  active tab indicators — update instantly. You never need to hunt down
+  individual component styles.
+</Tip>

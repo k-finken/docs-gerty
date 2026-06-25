@@ -1,0 +1,192 @@
+---
+title: "Mermaid: Interactive Diagram Renderer"
+sidebarTitle: "Mermaid"
+description: "Render Mermaid diagrams with automatic dark/light theme switching, pan and zoom controls, and clear error messages for invalid syntax."
+---
+
+Use the `Mermaid` component to embed flowcharts, sequence diagrams, entity-relationship diagrams, and any other diagram type supported by the [Mermaid](https://mermaid.js.org) library. The component handles theme switching automatically and adds interactive pan/zoom controls for large diagrams.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Mermaid } from '@mintlify/components';
+```
+
+## Basic Usage
+
+```tsx
+<Mermaid
+  chart={`graph TD
+    A[Start] --> B{Is it working?}
+    B -- Yes --> C[Great!]
+    B -- No  --> D[Debug]
+    D --> A`}
+/>
+```
+
+---
+
+## Props
+
+<ParamField path="chart" type="string" required>
+  The Mermaid diagram definition as a string. This is the raw Mermaid syntax you would write in a `.mmd` file — no fences or language tags needed.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names to apply to the diagram container.
+</ParamField>
+
+<ParamField path="ariaLabel" type="string">
+  A descriptive label for the rendered SVG, announced by screen readers. Defaults to a generic diagram label.
+</ParamField>
+
+<ParamField path="actions" type="boolean">
+  When `true`, forces the pan/zoom toolbar to appear even if the diagram is not tall enough to trigger it automatically. Defaults to `false`.
+</ParamField>
+
+<ParamField path="placement" type="'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'">
+  Controls where the pan/zoom action toolbar is positioned relative to the diagram container. Defaults to `"bottom-right"`.
+</ParamField>
+
+---
+
+## Examples
+
+### Flowchart
+
+```tsx
+<Mermaid
+  chart={`flowchart LR
+    User -->|Request| API
+    API  -->|Query|   DB[(Database)]
+    DB   -->|Result|  API
+    API  -->|Response| User`}
+/>
+```
+
+### Sequence Diagram
+
+```tsx
+<Mermaid
+  chart={`sequenceDiagram
+    autonumber
+    participant C as Client
+    participant S as Server
+    participant D as Database
+
+    C->>S: POST /login
+    S->>D: SELECT user WHERE email=?
+    D-->>S: User record
+    S-->>C: 200 OK { token }`}
+/>
+```
+
+### Entity Relationship Diagram
+
+```tsx
+<Mermaid
+  chart={`erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER    ||--|{ LINE_ITEM : contains
+    PRODUCT  }|--|{ LINE_ITEM : "listed in"`}
+/>
+```
+
+### State Diagram
+
+```tsx
+<Mermaid
+  chart={`stateDiagram-v2
+    [*] --> Idle
+    Idle --> Loading : submit()
+    Loading --> Success : response ok
+    Loading --> Error   : response error
+    Success --> Idle    : reset()
+    Error   --> Idle    : reset()`}
+/>
+```
+
+### Gantt Chart
+
+```tsx
+<Mermaid
+  chart={`gantt
+    title Project Timeline
+    dateFormat YYYY-MM-DD
+    section Design
+      Wireframes  : 2024-01-01, 7d
+      Mockups     : 2024-01-08, 7d
+    section Engineering
+      API         : 2024-01-08, 14d
+      Frontend    : 2024-01-15, 14d`}
+/>
+```
+
+### Forcing Pan/Zoom Controls
+
+For smaller diagrams where you still want users to be able to pan and zoom, set `actions={true}`:
+
+```tsx
+<Mermaid
+  actions={true}
+  chart={`graph LR
+    A --> B --> C`}
+/>
+```
+
+### Custom Toolbar Placement
+
+```tsx
+<Mermaid
+  placement="top-left"
+  chart={`graph TD
+    A --> B
+    A --> C
+    B --> D
+    C --> D`}
+/>
+```
+
+### Accessible Diagrams
+
+Provide an `ariaLabel` when the diagram conveys meaningful information that should be accessible to screen reader users:
+
+```tsx
+<Mermaid
+  ariaLabel="Authentication flow: user submits credentials, server validates, returns JWT token"
+  chart={`sequenceDiagram
+    User->>Auth: POST /token { email, password }
+    Auth->>Auth: validate credentials
+    Auth-->>User: 200 { access_token, refresh_token }`}
+/>
+```
+
+---
+
+## Theme Switching
+
+The `Mermaid` component automatically selects the appropriate Mermaid theme (`default` in light mode, `dark` in dark mode) based on the page's current color scheme. No configuration is needed — diagrams update instantly when the user toggles the theme.
+
+---
+
+## Error Handling
+
+When the `chart` string contains invalid Mermaid syntax, the component displays an error message in a red box in place of the diagram. This makes debugging diagrams in development straightforward.
+
+<Tip>
+  Mermaid is sensitive to indentation and whitespace in some diagram types. If you see an unexpected error, check that template literals do not have leading spaces before diagram keywords.
+</Tip>
+
+---
+
+## Accessibility
+
+- The rendered SVG receives an `aria-label` attribute from the `ariaLabel` prop, making it identifiable to assistive technologies.
+- Pan/zoom controls are keyboard-accessible buttons with descriptive labels.
+- The error state is rendered as visible text so it is readable by both sighted users and screen readers.

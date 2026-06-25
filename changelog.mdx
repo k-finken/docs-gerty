@@ -1,0 +1,213 @@
+---
+title: "Mintlify Components Changelog and Release Notes"
+sidebarTitle: "Changelog"
+description: "Release history for @mintlify/components. Track new components, bug fixes, and breaking changes across every version."
+---
+
+This page documents every published release of [`@mintlify/components`](https://www.npmjs.com/package/@mintlify/components). Versions are listed newest-first so you can immediately see what changed in the most recent release. Each entry notes the publish date and categorizes changes as **Added**, **Changed**, or **Fixed**.
+
+---
+
+## 1.0.17 — May 1, 2026
+
+### Fixed
+
+- Added TOML language preset to `CodeGroup` to fix the missing language icon ([#235](https://github.com/mintlify/components/pull/235) by [@20syldev](https://github.com/20syldev))
+- Removed unintended clipboard copy that was triggered when opening an `Accordion` ([#234](https://github.com/mintlify/components/pull/234) by [@20syldev](https://github.com/20syldev))
+
+---
+
+## 1.0.16 — April 17, 2026
+
+### Changed
+
+- Bumped `brace-expansion` from 1.1.12 → 1.1.14 ([#233](https://github.com/mintlify/components/pull/233))
+- Bumped `lodash` from 4.17.23 → 4.18.1 ([#233](https://github.com/mintlify/components/pull/233))
+- Bumped `vite` from 6.4.1 → 6.4.2 ([#233](https://github.com/mintlify/components/pull/233))
+
+---
+
+## 1.0.15 — April 3, 2026
+
+### Changed
+
+- Adjusted the `Columns` multi-column breakpoint for better responsiveness ([#229](https://github.com/mintlify/components/pull/229))
+
+---
+
+## 1.0.14 — March 20, 2026
+
+### Added
+
+- Added a `title` prop to the `Callout` component ([#216](https://github.com/mintlify/components/pull/216) by [@x0rgus](https://github.com/x0rgus))
+
+### Changed
+
+- Bumped `flatted` from 3.3.3 → 3.4.2 ([#223](https://github.com/mintlify/components/pull/223))
+
+---
+
+## 1.0.13 — March 19, 2026
+
+### Changed
+
+- Changed `Columns` to use a named container query (`columns-container`) for more precise layout control ([#222](https://github.com/mintlify/components/pull/222))
+
+---
+
+## 1.0.12 — March 18, 2026
+
+### Added
+
+- Added an `InsideContainer` Storybook story demonstrating container query behavior with a resizable wrapper ([#220](https://github.com/mintlify/components/pull/220))
+
+### Changed
+
+- Added container query responsiveness support to the `Columns` component ([#221](https://github.com/mintlify/components/pull/221))
+
+---
+
+## 1.0.11 — March 12, 2026
+
+### Fixed
+
+- Added `tabIndex` on the base code block element to restore keyboard focus behavior ([#214](https://github.com/mintlify/components/pull/214))
+
+---
+
+## 1.0.10 — March 11, 2026
+
+### Added
+
+- Exported `Pill` components from the package entry point ([#212](https://github.com/mintlify/components/pull/212))
+
+---
+
+## 1.0.9 — March 11, 2026
+
+### Added
+
+- Added `CodeGroupSelect` component for two-level snippet selection with group and example dropdowns ([#209](https://github.com/mintlify/components/pull/209))
+- Exported `DropdownMenu` base component and related primitives ([#210](https://github.com/mintlify/components/pull/210))
+
+---
+
+## 1.0.8 — March 10, 2026
+
+### Added
+
+- Exported `CodeSnippet` component from the package entry point ([#206](https://github.com/mintlify/components/pull/206))
+
+---
+
+## 1.0.7 — March 9, 2026
+
+### Fixed
+
+- Fixed `Expandable` chevron icon size and color ([#203](https://github.com/mintlify/components/pull/203))
+
+---
+
+## 1.0.6 — March 5, 2026
+
+### Added
+
+- Exported `ParamHead` component from the package entry point ([#202](https://github.com/mintlify/components/pull/202))
+
+### Changed
+
+- Bumped Storybook from 10.1.11 → 10.2.10 ([#201](https://github.com/mintlify/components/pull/201))
+- Bumped `ajv` from 6.12.6 → 6.14.0 ([#200](https://github.com/mintlify/components/pull/200))
+
+---
+
+## 1.0.5 — February 12, 2026
+
+### Fixed
+
+- Fixed `mask-size` for brand icons ([#197](https://github.com/mintlify/components/pull/197))
+- Fixed bold text styles inside `Callout` ([#196](https://github.com/mintlify/components/pull/196))
+
+### Changed
+
+- Refined the `Search` bar and made it more customizable ([#198](https://github.com/mintlify/components/pull/198))
+
+---
+
+## 1.0.4 — February 9, 2026
+
+### Added
+
+- Added `Search` component with a search modal, recent searches list, and full keyboard navigation ([#194](https://github.com/mintlify/components/pull/194) by [@lindsayzhng](https://github.com/lindsayzhng))
+
+---
+
+## 1.0.3 — February 5, 2026
+
+### Fixed
+
+- Fixed bundling of the Shiki syntax-highlighting worker ([#190](https://github.com/mintlify/components/pull/190) by [@lindsayzhng](https://github.com/lindsayzhng))
+
+---
+
+## 1.0.2 — January 30, 2026
+
+### Added
+
+- Added anchor link support to `Steps` via new `id` and `noAnchor` props ([#187](https://github.com/mintlify/components/pull/187))
+- Added `side` and `align` props to `Tooltip` for fine-grained positioning control ([#181](https://github.com/mintlify/components/pull/181) by [@shadabiiitnr20](https://github.com/shadabiiitnr20))
+
+### Fixed
+
+- Fixed `isMounted` check for the `View` component ([#186](https://github.com/mintlify/components/pull/186))
+- Fixed duplicated IDs and default Gantt chart sizing in the `Mermaid` component ([#183](https://github.com/mintlify/components/pull/183))
+
+### Changed
+
+- Updated internal props for `Accordion` and `Card` components ([#185](https://github.com/mintlify/components/pull/185))
+- Preferred canonical Tailwind classes throughout the codebase ([#178](https://github.com/mintlify/components/pull/178) by [@0xa3k5](https://github.com/0xa3k5))
+
+---
+
+## 1.0.1 — January 26, 2025
+
+### Fixed
+
+- Fixed CSS bundling by adding the `@tailwindcss/cli` dependency ([#174](https://github.com/mintlify/components/pull/174))
+- Fixed code block header truncation ([#173](https://github.com/mintlify/components/pull/173))
+- Fixed type exports and disabled the default `rollupTypes` setting ([#176](https://github.com/mintlify/components/pull/176))
+
+### Changed
+
+- Updated README with style override instructions ([#175](https://github.com/mintlify/components/pull/175))
+- Bumped `lodash` from 4.17.21 → 4.17.23 ([#171](https://github.com/mintlify/components/pull/171))
+
+---
+
+## 1.0.0 — January 23, 2025
+
+### Initialized components library
+
+The first stable release of `@mintlify/components`. This version ships the complete foundational set of components:
+
+| Component | Description |
+|---|---|
+| `Accordion` | Expandable content sections |
+| `Badge` | Status and label badges |
+| `Callout` | Highlighted information boxes |
+| `Card` | Content cards |
+| `CodeBlock` | Syntax-highlighted code with copy button |
+| `CodeGroup` | Code block container with tabs or dropdown selection |
+| `Columns` | Multi-column layouts |
+| `Expandable` | Collapsible sections |
+| `Frame` | Image and content frames |
+| `Icon` | Icon rendering |
+| `Mermaid` | Diagram rendering |
+| `Panel` | Panel layouts |
+| `Property` | API property display |
+| `Steps` | Step-by-step instructions |
+| `Tabs` | Tabbed interfaces |
+| `Tile` | Tile grids |
+| `Tooltip` | Hover tooltips |
+| `Tree` | Hierarchical tree views |
+| `Update` | Changelog entries |

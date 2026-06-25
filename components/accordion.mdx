@@ -1,0 +1,187 @@
+---
+title: "Accordion: Collapsible Content Sections"
+sidebarTitle: "Accordion"
+description: "Display collapsible sections that expand on click. Group multiple accordions together and sync open state to the URL for shareable deep links."
+---
+
+Use `Accordion` whenever you want to hide non-critical content behind a clickable header — FAQs, reference details, optional configuration steps, and similar patterns where showing everything at once would overwhelm the reader.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Accordion } from '@mintlify/components';
+```
+
+## Basic usage
+
+Each `Accordion` requires a `title` and `defaultOpen` prop. Place any content — paragraphs, code blocks, lists — as children.
+
+```tsx
+<Accordion title="What is Mintlify?" defaultOpen={false}>
+  Mintlify is a platform for creating beautiful documentation for your products.
+</Accordion>
+```
+
+## Props
+
+### Accordion
+
+<ParamField path="title" type="ReactNode" required>
+  The header text shown at all times. Use a plain string for best compatibility with URL state sync and tracking callbacks — `ReactNode` is supported for advanced rendering only.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean" required>
+  Whether the accordion starts in the open state. Pass `false` to keep it collapsed by default.
+</ParamField>
+
+<ParamField path="description" type="string">
+  Optional subtitle rendered below the title in the header row.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode | string">
+  Icon displayed to the left of the title. Pass a FontAwesome icon name as a string (e.g. `"rocket"`) or any React node for a fully custom icon.
+</ParamField>
+
+<ParamField path="iconType" type='"solid" | "regular" | "brands" | "duotone" | "light" | "thin"'>
+  FontAwesome icon style. Only used when `icon` is a string name.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outer `<details>` element.
+</ParamField>
+
+<ParamField path="trackOpen" type="(event: { title: string }) => void">
+  Callback fired when the accordion is opened. Receives the accordion's title string.
+</ParamField>
+
+<ParamField path="trackClose" type="(event: { title: string }) => void">
+  Callback fired when the accordion is closed. Receives the accordion's title string.
+</ParamField>
+
+### Accordion.Group
+
+<ParamField path="children" type="ReactNode" required>
+  One or more `Accordion` components. The group renders them in a unified bordered container with shared dividers.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the group container.
+</ParamField>
+
+## Examples
+
+### Open by default
+
+Set `defaultOpen={true}` to expand an accordion on first render — useful for surfacing the most relevant section immediately.
+
+```tsx
+<Accordion title="Getting Started" defaultOpen={true}>
+  To get started, install the CLI, initialize your project, then run the dev server.
+</Accordion>
+```
+
+### With description and icon
+
+Combine a `description` subtitle and an `icon` to create richly labeled sections.
+
+```tsx
+<Accordion
+  title="API Reference"
+  description="All available endpoints and parameters"
+  icon="code"
+  iconType="solid"
+  defaultOpen={false}
+>
+  View the complete API reference for all available endpoints.
+</Accordion>
+```
+
+### Grouped accordions
+
+Wrap multiple `Accordion` components in `Accordion.Group` to merge them into a single bordered panel. The group removes individual borders and adds shared dividers between items.
+
+```tsx
+<Accordion.Group>
+  <Accordion title="Installation" defaultOpen={true}>
+    Run `npm install @mintlify/components` to add the package.
+  </Accordion>
+  <Accordion title="Configuration" defaultOpen={false}>
+    Create a `mint.json` file in your project root.
+  </Accordion>
+  <Accordion title="Usage" defaultOpen={false}>
+    Import any component and drop it into your MDX page.
+  </Accordion>
+</Accordion.Group>
+```
+
+### With open/close tracking
+
+Use `trackOpen` and `trackClose` to fire analytics events or log user behaviour whenever an accordion changes state.
+
+```tsx
+<Accordion
+  title="Pricing FAQ"
+  defaultOpen={false}
+  trackOpen={({ title }) => analytics.track('accordion_opened', { title })}
+  trackClose={({ title }) => analytics.track('accordion_closed', { title })}
+>
+  Our pricing is based on the number of monthly page views.
+</Accordion>
+```
+
+### Nested accordions
+
+Accordions can be nested inside each other to build hierarchical content structures.
+
+```tsx
+<Accordion title="Advanced Topics" defaultOpen={true}>
+  <p>These sections cover advanced usage patterns.</p>
+
+  <Accordion title="Custom Theming" defaultOpen={false}>
+    Override Tailwind classes via the `className` prop.
+  </Accordion>
+
+  <Accordion title="Server-Side Rendering" defaultOpen={false}>
+    All components are SSR-compatible out of the box.
+  </Accordion>
+</Accordion>
+```
+
+## URL state synchronization
+
+When your title is a plain string, `Accordion` derives a slug-based ID from it. You can wire up the `getInitialOpenFromUrl` and `onUrlStateChange` props (using the bundled `getInitialOpenState` and `updateAndCopyUrl` helpers) to reflect each accordion's open/closed state in the URL hash. This lets users bookmark or share a link that opens a specific accordion automatically.
+
+```tsx
+import {
+  Accordion,
+  getInitialOpenState,
+  updateAndCopyUrl,
+} from '@mintlify/components';
+
+const getInitialOpen = getInitialOpenState();
+const handleUrlChange = updateAndCopyUrl();
+
+<Accordion
+  title="Deep-linkable Section"
+  defaultOpen={false}
+  getInitialOpenFromUrl={getInitialOpen}
+  onUrlStateChange={handleUrlChange}
+>
+  Open this accordion and the URL hash updates automatically.
+  Share the link — the accordion will reopen on page load.
+</Accordion>
+```
+
+<Note>
+  URL state sync only works when `title` is a plain string. Passing a `ReactNode` title disables ID generation, so the accordion cannot be reflected in the URL hash.
+</Note>
+
+## Dark mode
+
+`Accordion` uses Tailwind's `dark:` variants throughout. No additional configuration is required — it adapts automatically when your site switches between light and dark themes.

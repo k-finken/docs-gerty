@@ -1,0 +1,211 @@
+---
+title: "Columns: Responsive Multi-Column Grid Layouts"
+sidebarTitle: "Columns"
+description: "Arrange content into 1–4 equal-width columns with container-query responsiveness. Collapses to a single column automatically on narrow containers."
+---
+
+Use `Columns` whenever you want to place multiple pieces of content side by side — a grid of `Card` components, a row of code snippets, a set of images, or any arbitrary layout. You control the column count; the component handles responsiveness for you.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```jsx
+import { Columns } from '@mintlify/components'
+```
+
+## Basic usage
+
+```jsx
+<Columns cols={3}>
+  <Card title="Install" icon="download" href="/install">Set up the SDK.</Card>
+  <Card title="Configure" icon="settings" href="/configure">Add your API key.</Card>
+  <Card title="Deploy" icon="rocket" href="/deploy">Ship to production.</Card>
+</Columns>
+```
+
+---
+
+## Props
+
+<ParamField path="children" type="ReactNode" required>
+  The items to arrange in the grid. Each direct child occupies one column cell. You can pass any React content — `Card`, `Tile`, images, or custom components.
+</ParamField>
+
+<ParamField path="cols" type="1 | 2 | 3 | 4" default="2">
+  The number of equal-width columns. Accepts the numbers `1`, `2`, `3`, or `4`, or their string equivalents. The default is `2`.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the grid container. Use this to customise the gap, add a background, or override spacing.
+</ParamField>
+
+---
+
+## Examples
+
+### Two-column layout (default)
+
+Omit `cols` or pass `cols={2}` to get the default side-by-side layout.
+
+```jsx
+<Columns>
+  <Card title="Client libraries" icon="code" href="/sdks">
+    Official SDKs for Python, TypeScript, Go, and more.
+  </Card>
+  <Card title="REST API" icon="globe" href="/api-reference">
+    Direct HTTP access from any language or tool.
+  </Card>
+</Columns>
+```
+
+### Three-column layout
+
+Use `cols={3}` for richer navigation grids or feature showcases.
+
+```jsx
+<Columns cols={3}>
+  <Card title="Authentication" icon="lock" href="/auth">
+    API keys, OAuth 2.0, and JWT support.
+  </Card>
+  <Card title="Rate limits" icon="gauge" href="/rate-limits">
+    Understand request quotas and back-off strategies.
+  </Card>
+  <Card title="Errors" icon="circle-exclamation" href="/errors">
+    HTTP status codes and structured error payloads.
+  </Card>
+</Columns>
+```
+
+### Four-column layout
+
+```jsx
+<Columns cols={4}>
+  <Card title="Python" icon="python" iconType="brands" href="/sdks/python" />
+  <Card title="TypeScript" icon="js" iconType="brands" href="/sdks/typescript" />
+  <Card title="Go" icon="golang" iconType="brands" href="/sdks/go" />
+  <Card title="Ruby" icon="ruby" iconType="brands" href="/sdks/ruby" />
+</Columns>
+```
+
+### Single column
+
+Pass `cols={1}` to render children stacked vertically. This is useful when you want consistent card sizing across different sections of a page but still need them to flow in one dimension.
+
+```jsx
+<Columns cols={1}>
+  <Card title="Step 1 — Create a project" icon="folder-plus" href="/setup/project">
+    Initialize a new workspace and invite your team.
+  </Card>
+  <Card title="Step 2 — Add credentials" icon="key" href="/setup/credentials">
+    Store your API keys securely in environment variables.
+  </Card>
+  <Card title="Step 3 — Make your first call" icon="play" href="/setup/first-call">
+    Send a request and inspect the response.
+  </Card>
+</Columns>
+```
+
+### Mixed content
+
+`Columns` is not limited to `Card` components — place any renderable content inside.
+
+```jsx
+<Columns cols={2}>
+  <Frame title="Light theme">
+    <img src="/images/preview-light.png" alt="Light theme preview" />
+  </Frame>
+  <Frame title="Dark theme">
+    <img src="/images/preview-dark.png" alt="Dark theme preview" />
+  </Frame>
+</Columns>
+```
+
+### Custom gap
+
+Use `className` to override the default `gap-4` spacing between columns.
+
+```jsx
+<Columns cols={3} className="gap-8">
+  <Card title="Docs" icon="book" href="/docs" />
+  <Card title="Blog" icon="rss" href="/blog" />
+  <Card title="Support" icon="life-ring" href="/support" />
+</Columns>
+```
+
+<Tip>
+  Tailwind gap utilities like `gap-2`, `gap-6`, and `gap-8` all work inside `className`. Use `gap-x-*` and `gap-y-*` if you want independent horizontal and vertical spacing.
+</Tip>
+
+---
+
+## Responsive behaviour
+
+<Note>
+  Responsive behaviour is driven by **CSS container queries**, not viewport width. The column count adapts to the width of the nearest container, not the browser window.
+</Note>
+
+`Columns` uses the Tailwind `@container` plugin so it responds to the **container** it lives inside rather than the viewport. This makes it reliable in sidebars, modals, and any layout where the content area is narrower than the full screen.
+
+The breakpoint thresholds are:
+
+| Container width | Rendered columns |
+|---|---|
+| Less than `@2xl` (~42 rem) | 1 column |
+| `@2xl` and above | `cols` value |
+
+This means a `<Columns cols={3}>` block collapses to a single column automatically when its parent container is too narrow to comfortably fit three items.
+
+### Container query example
+
+Wrap `Columns` in a container query context to control responsive behaviour manually:
+
+```jsx
+{/* The parent must carry the @container/columns-container class name */}
+<div className="@container/columns-container">
+  <Columns cols={3}>
+    <Card title="Alpha" icon="a" href="/alpha" />
+    <Card title="Beta" icon="b" href="/beta" />
+    <Card title="Gamma" icon="g" href="/gamma" />
+  </Columns>
+</div>
+```
+
+<Note>
+  The `@container/columns-container` class name is the container query identifier that `Columns` targets internally. If you nest `Columns` inside any element that already carries this class, the breakpoint logic applies automatically.
+</Note>
+
+### Practical layout example with `Steps`
+
+Pair `Columns` with `Steps` to build a structured onboarding sequence where each step has its own resource grid.
+
+<Steps>
+  <Step title="Install the package">
+    Run the install command for your package manager.
+
+    ```bash
+    npm install @mintlify/components
+    ```
+  </Step>
+
+  <Step title="Choose your components">
+    Pick the building blocks you need.
+
+    <Columns cols={2}>
+      <Card title="Card" icon="rectangle-vertical" href="/components/card">
+        Linked content blocks with icons and CTAs.
+      </Card>
+      <Card title="Frame" icon="image" href="/components/frame">
+        Styled media containers with captions.
+      </Card>
+    </Columns>
+  </Step>
+
+  <Step title="Compose your page">
+    Combine components to build rich documentation pages.
+  </Step>
+</Steps>

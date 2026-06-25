@@ -1,0 +1,83 @@
+---
+title: "Mintlify Components: React UI Library for Docs"
+sidebarTitle: "Introduction"
+description: "Mintlify Components is an open-source React library with 22 production-ready components for documentation sites. Built with Tailwind CSS."
+---
+
+**Mintlify Components** (`@mintlify/components`) is an open-source React UI library that gives you 22 production-ready components specifically designed for documentation sites. Built on top of Tailwind CSS, every component ships with sensible defaults, full dark mode support, and accessibility baked in — so you spend your time writing great docs, not rebuilding UI primitives from scratch.
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="22 ready-to-use components" icon="code">
+    From Accordion and Callout to Mermaid diagrams and syntax-highlighted
+    CodeBlocks, every common docs pattern is covered out of the box.
+  </Card>
+  <Card title="Tailwind CSS v3 & v4" icon="palette">
+    Full compatibility with both Tailwind CSS v3 and v4. Override design tokens
+    in your CSS or `tailwind.config.js` to match your brand in seconds.
+  </Card>
+  <Card title="Dark mode included" icon="moon">
+    Every component uses Tailwind `dark:` variants. Enable dark mode in your
+    Tailwind config and all components adapt automatically — no extra work
+    required.
+  </Card>
+  <Card title="Accessible by default" icon="universal-access">
+    Components are built with semantic HTML and ARIA attributes so your
+    documentation is usable by everyone, including screen-reader users.
+  </Card>
+  <Card title="Shiki syntax highlighting" icon="search">
+    `CodeBlock` and `CodeGroup` use [Shiki](https://shiki.style) for accurate,
+    theme-aware syntax highlighting across dozens of programming languages.
+  </Card>
+  <Card title="Mermaid diagram support" icon="diagram-project">
+    Render flowcharts, sequence diagrams, and more with the built-in `Mermaid`
+    component — no additional setup needed.
+  </Card>
+</CardGroup>
+
+## What's included
+
+The library exports the following components and utilities:
+
+| Component | Description |
+|---|---|
+| `Accordion` / `Accordion.Group` | Collapsible content sections |
+| `Badge` | Inline status and label badges |
+| `Callout` (Info / Warning / Note / Tip / Check / Danger) | Highlighted callout blocks |
+| `Card` | Content cards with optional icons and links |
+| `CodeBlock` | Syntax-highlighted code with copy support |
+| `CodeGroup` / `CodeGroupSelect` | Tabbed multi-language code snippets |
+| `Color` / `Color.Row` / `Color.Item` | Color swatch palettes |
+| `Columns` | Multi-column layout helper |
+| `Expandable` | Toggleable content regions |
+| `Frame` | Bordered image / media frames |
+| `Icon` | Icon rendering utility |
+| `Mermaid` | Mermaid.js diagram renderer |
+| `Panel` | Visually separated content panels |
+| `Property` | API property definition rows |
+| `Search` | Search input component |
+| `Steps` / `Steps.Item` | Numbered step-by-step guides |
+| `Tabs` / `Tabs.Item` | Tabbed content sections |
+| `Tile` | Large navigational tiles |
+| `Tooltip` | Hover tooltips |
+| `Tree` / `Tree.File` / `Tree.Folder` | File-tree visualizations |
+| `Update` | Changelog / release-note entries |
+| `cn` | Class-name utility (wraps `clsx` + `tailwind-merge`) |
+
+## Requirements
+
+<Note>
+  Make sure your environment meets all of the following requirements before
+  installing.
+
+  | Requirement | Version |
+  |---|---|
+  | Node.js | >= 20 |
+  | React | 18 or 19 |
+  | Tailwind CSS | v3 or v4 |
+</Note>
+
+React and Tailwind CSS are **peer dependencies** — you need to have them installed in your project before adding `@mintlify/components`.
+
+Ready to get started? Head over to the [Installation guide](/installation) to add the library to your project.

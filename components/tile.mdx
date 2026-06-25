@@ -1,0 +1,221 @@
+---
+title: "Tile: Visual Link Cards for Component Galleries"
+sidebarTitle: "Tile"
+description: "Clickable visual previews with a 170 px illustration area and plus-sign grid background. Ideal for component catalogues and integration directories."
+---
+
+Use `Tile` when you want to build a gallery of visually distinctive links — a component library index, an integration catalogue, a showcase of templates. Each tile provides a fixed-height container for an illustration or logo, a subtle plus-sign grid backdrop that works in both light and dark modes, and an optional text block for the name and a one-line description.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```jsx
+import { Tile } from '@mintlify/components'
+```
+
+## Basic usage
+
+```jsx
+<Tile href="/components/accordion" title="Accordion" description="Collapsible content sections">
+  <img src="/images/accordion-preview.png" alt="Accordion component preview" />
+</Tile>
+```
+
+---
+
+## Props
+
+<ParamField path="href" type="string" required>
+  The URL the tile links to. Relative paths (e.g. `/components/accordion`) navigate within the site. Full URLs starting with `https://` or `http://` open in a new tab automatically.
+</ParamField>
+
+<ParamField path="children" type="ReactNode" required>
+  The visual content rendered inside the 170 px illustration area. Use an SVG, an `<img>`, or any React element. The container centres content and constrains SVG dimensions to fill the available space while preserving the aspect ratio.
+</ParamField>
+
+<ParamField path="title" type="string">
+  The primary label displayed below the illustration. Rendered in semibold text and truncated with an ellipsis if it overflows the tile width. The full string appears in the native tooltip on hover.
+</ParamField>
+
+<ParamField path="description" type="string">
+  A secondary line of smaller text below the title. Truncated the same way as `title`. Use it for a version number, a tag line, or a brief feature summary.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes on the outer `<a>` element. Use to adjust width, add border styles, or customise hover effects.
+</ParamField>
+
+---
+
+## Examples
+
+### Tile with an SVG illustration
+
+Pass an inline SVG as `children` to get a crisp, resolution-independent preview at any screen density. The SVG scales automatically to fill the illustration area without overflowing.
+
+```jsx
+<Tile
+  href="/integrations/stripe"
+  title="Stripe"
+  description="Payment processing"
+>
+  <svg viewBox="0 0 60 25" xmlns="http://www.w3.org/2000/svg" aria-label="Stripe logo">
+    <path
+      d="M59.64 14.28h-8.06..."
+      fill="#635BFF"
+    />
+  </svg>
+</Tile>
+```
+
+### Tile with an image
+
+Use an `<img>` tag when your preview is a raster screenshot or a PNG logo.
+
+```jsx
+<Tile
+  href="/components/chart"
+  title="Chart"
+  description="Bar, line, and pie"
+>
+  <img
+    src="/images/chart-preview.png"
+    alt="A bar chart showing monthly revenue"
+  />
+</Tile>
+```
+
+### Title only
+
+Omit `description` when a one-word label is sufficient.
+
+```jsx
+<Tile href="/components/badge" title="Badge">
+  <img src="/images/badge-preview.png" alt="Badge component" />
+</Tile>
+```
+
+### No text labels
+
+Leave out both `title` and `description` when the illustration is self-explanatory, or when you're using the tile purely as a visual link with a tooltip elsewhere.
+
+```jsx
+<Tile href="/components/accordion">
+  <img src="/images/accordion-preview.png" alt="Accordion component preview" />
+</Tile>
+```
+
+### External integration tile
+
+When `href` is a full URL, the tile opens in a new tab and adds `rel="noreferrer"` automatically — the same behaviour as [`Card`](/components/card).
+
+```jsx
+<Tile
+  href="https://stripe.com/docs"
+  title="Stripe Docs"
+  description="Official reference"
+>
+  <img src="/images/stripe-logo.png" alt="Stripe" />
+</Tile>
+```
+
+<Tip>
+  You don't need to add `target="_blank"` manually. Pass any `https://` URL and `Tile` handles the rest.
+</Tip>
+
+### Component catalogue gallery
+
+Pair `Tile` with [`Columns`](/components/columns) to build a grid-based component index. This is the most common use case — each tile links to a component's documentation page and shows a miniature preview.
+
+```jsx
+import { Tile, Columns } from '@mintlify/components'
+
+<Columns cols={3}>
+  <Tile href="/components/accordion" title="Accordion" description="2 variants">
+    <img src="/images/accordion-preview.png" alt="Accordion preview" />
+  </Tile>
+  <Tile href="/components/card" title="Card" description="Links, icons, CTAs">
+    <img src="/images/card-preview.png" alt="Card preview" />
+  </Tile>
+  <Tile href="/components/frame" title="Frame" description="Media containers">
+    <img src="/images/frame-preview.png" alt="Frame preview" />
+  </Tile>
+  <Tile href="/components/columns" title="Columns" description="Responsive grid">
+    <img src="/images/columns-preview.png" alt="Columns preview" />
+  </Tile>
+  <Tile href="/components/badge" title="Badge" description="Status labels">
+    <img src="/images/badge-preview.png" alt="Badge preview" />
+  </Tile>
+  <Tile href="/components/callout" title="Callout" description="Notes, tips, warnings">
+    <img src="/images/callout-preview.png" alt="Callout preview" />
+  </Tile>
+</Columns>
+```
+
+### Integration directory
+
+Use `Tile` to build a directory of third-party integrations where each tile leads to the integration's setup guide.
+
+```jsx
+<Columns cols={4}>
+  <Tile href="/integrations/slack" title="Slack" description="Send notifications">
+    <img src="/images/slack-logo.svg" alt="Slack" />
+  </Tile>
+  <Tile href="/integrations/github" title="GitHub" description="Sync repositories">
+    <img src="/images/github-logo.svg" alt="GitHub" />
+  </Tile>
+  <Tile href="/integrations/datadog" title="Datadog" description="Monitor metrics">
+    <img src="/images/datadog-logo.svg" alt="Datadog" />
+  </Tile>
+  <Tile href="/integrations/pagerduty" title="PagerDuty" description="On-call alerting">
+    <img src="/images/pagerduty-logo.svg" alt="PagerDuty" />
+  </Tile>
+</Columns>
+```
+
+### Light and dark preview variants
+
+If your component has visually distinct light and dark designs, show both by rendering two SVGs inside a single tile — one visible in light mode and one in dark mode — using Tailwind's `dark:` utilities.
+
+```jsx
+<Tile href="/components/accordion" title="Accordion" description="2 variants">
+  {/* Light mode preview */}
+  <svg
+    className="block dark:hidden"
+    viewBox="0 0 184 100"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* ... light SVG paths ... */}
+  </svg>
+
+  {/* Dark mode preview */}
+  <svg
+    className="hidden dark:block"
+    viewBox="0 0 184 100"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* ... dark SVG paths ... */}
+  </svg>
+</Tile>
+```
+
+---
+
+## Behaviour notes
+
+**Background pattern** — The illustration area renders a repeating plus-sign (+) grid pattern using an inline SVG data URI. The light-mode pattern uses `#F0F0F0` strokes at 50% opacity; the dark-mode pattern switches to `#232323`. Both are rendered as separate `<div>` layers — one with `block dark:hidden` and one with `hidden dark:block` — so the correct pattern activates automatically without JavaScript.
+
+**SVG sizing** — Any SVG passed as `children` receives `max-h-full`, `max-w-full`, and `h-auto` / `w-auto` via the container's CSS. This means your SVG fills the 170 px tall area proportionally without you needing to set explicit dimensions.
+
+**Text truncation** — Both `title` and `description` use `text-overflow: ellipsis` and `max-width: 100%`. The full string is always accessible via the native `title` attribute on the `<p>` element, which most browsers surface as a tooltip.
+
+**External link detection** — The same `isRemoteUrl` utility used by `Card` applies here. Any `href` with an `http://` or `https://` protocol receives `target="_blank"` and `rel="noreferrer"` automatically.
+
+**Dark mode** — The tile background (`bg-stone-50` / `dark:bg-stone-900`), the side-edge fade overlays, and the text colours all adapt to the active theme with no configuration required.

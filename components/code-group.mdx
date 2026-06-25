@@ -1,0 +1,247 @@
+---
+title: "CodeGroup: Tabbed Multi-Language Code Examples"
+sidebarTitle: "CodeGroup"
+description: "Display multiple CodeBlock snippets in a single tabbed container. Let readers switch between languages or frameworks without losing their place on the page."
+---
+
+Use `CodeGroup` when you want to show the same concept in multiple languages or configurations side by side — for example, a cURL request alongside JavaScript and Python SDK equivalents.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { CodeGroup } from '@mintlify/components';
+import { CodeBlock } from '@mintlify/components';
+```
+
+## Basic usage
+
+Wrap two or more `CodeBlock` components inside `CodeGroup`. The `filename` prop on each `CodeBlock` becomes the tab label.
+
+```tsx
+<CodeGroup>
+  <CodeBlock filename="JavaScript" language="javascript">
+    {`fetch('https://api.example.com/ping')
+  .then(res => res.json())
+  .then(data => console.log(data));`}
+  </CodeBlock>
+  <CodeBlock filename="Python" language="python">
+    {`import requests
+
+response = requests.get('https://api.example.com/ping')
+print(response.json())`}
+  </CodeBlock>
+  <CodeBlock filename="cURL" language="bash">
+    {`curl https://api.example.com/ping`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+## Props
+
+### CodeGroup
+
+<ParamField path="children" type="ReactElement<CodeBlockProps> | ReactElement<CodeBlockProps>[]" required>
+  One or more `CodeBlock` components. Each child's `filename` prop is used as the tab label. At least one child is required.
+</ParamField>
+
+<ParamField path="dropdown" type="boolean">
+  Replace the tab bar with a filename dropdown selector. Useful when you have many tabs and the tab bar would overflow.
+</ParamField>
+
+<ParamField path="initialSelectedTab" type="number" default="0">
+  Zero-based index of the tab to activate on first render.
+</ParamField>
+
+<ParamField path="onSelectedTabChange" type="(index: number) => void">
+  Callback fired whenever the active tab changes. Receives the zero-based index of the newly selected tab.
+</ParamField>
+
+<ParamField path="codeBlockTheme" type='"system" | "dark"' default='"system"'>
+  Controls the UI chrome for the entire group. `"system"` adapts to the user's system preference; `"dark"` always renders the dark UI.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outermost container.
+</ParamField>
+
+<ParamField path="askAiButton" type="ReactNode">
+  A React node placed in the toolbar area next to the copy button. Wire it to your AI assistant to let readers ask questions about the displayed code.
+</ParamField>
+
+<ParamField path="feedbackButton" type="ReactNode">
+  A React node placed in the toolbar alongside the copy button — typically a thumbs-up/thumbs-down feedback widget.
+</ParamField>
+
+<ParamField path="copyButtonProps" type="CopyToClipboardButtonProps">
+  Props forwarded to the built-in copy button. The copy button always copies the code from the currently active tab.
+</ParamField>
+
+## Examples
+
+### With file icons
+
+Add an `icon` prop to each `CodeBlock` child to display a brand icon beside the tab label.
+
+```tsx
+<CodeGroup>
+  <CodeBlock filename="app.ts" icon="typescript" language="typescript">
+    {`import axios from 'axios';
+
+const { data } = await axios.get('/api/users');
+console.log(data);`}
+  </CodeBlock>
+  <CodeBlock filename="app.py" icon="python" language="python">
+    {`import httpx
+
+async with httpx.AsyncClient() as client:
+    response = await client.get('/api/users')
+    print(response.json())`}
+  </CodeBlock>
+  <CodeBlock filename="app.go" icon="go" language="go">
+    {`resp, err := http.Get("/api/users")
+if err != nil {
+    log.Fatal(err)
+}`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+### With line numbers and highlighting
+
+Every `CodeBlock` prop — `lines`, `highlight`, `focus`, `wrap`, `expandable` — works inside a `CodeGroup`.
+
+```tsx
+<CodeGroup>
+  <CodeBlock
+    filename="install.sh"
+    language="bash"
+    lines={true}
+    highlight={JSON.stringify([2])}
+  >
+    {`# Install the CLI globally
+npm install -g @mintlify/cli
+
+# Verify the installation
+mintlify --version`}
+  </CodeBlock>
+  <CodeBlock
+    filename="install.sh"
+    language="bash"
+    lines={true}
+    highlight={JSON.stringify([2])}
+  >
+    {`# Install with Homebrew
+brew install mintlify
+
+# Verify the installation
+mintlify --version`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+### Starting on a specific tab
+
+Use `initialSelectedTab` to open a tab other than the first one by default. The value is a zero-based index.
+
+```tsx
+<CodeGroup initialSelectedTab={1}>
+  <CodeBlock filename="Node.js" language="javascript">
+    {`const sdk = require('@acme/sdk');
+sdk.init({ apiKey: process.env.API_KEY });`}
+  </CodeBlock>
+  <CodeBlock filename="Python" language="python">
+    {`from acme import SDK
+sdk = SDK(api_key=os.environ['API_KEY'])`}
+  </CodeBlock>
+  <CodeBlock filename="Ruby" language="ruby">
+    {`require 'acme-sdk'
+Acme::SDK.configure { |c| c.api_key = ENV['API_KEY'] }`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+### Dropdown mode
+
+When you have many language options, replace the tab bar with a dropdown using `dropdown={true}`. The currently selected filename and language appear in the header.
+
+```tsx
+<CodeGroup dropdown={true}>
+  <CodeBlock filename="JavaScript" icon="js" language="javascript">
+    {`console.log('Hello');`}
+  </CodeBlock>
+  <CodeBlock filename="TypeScript" icon="typescript" language="typescript">
+    {`console.log('Hello' as string);`}
+  </CodeBlock>
+  <CodeBlock filename="Python" icon="python" language="python">
+    {`print('Hello')`}
+  </CodeBlock>
+  <CodeBlock filename="Java" icon="java" language="java">
+    {`System.out.println("Hello");`}
+  </CodeBlock>
+  <CodeBlock filename="Rust" language="rust">
+    {`println!("Hello");`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+### Reacting to tab changes
+
+Use `onSelectedTabChange` to track which language the reader is viewing — for analytics, or to synchronize a parallel example elsewhere on the page.
+
+```tsx
+<CodeGroup onSelectedTabChange={(index) => console.log('Tab:', index)}>
+  <CodeBlock filename="Request" language="bash">
+    {`curl -X POST https://api.example.com/auth \\
+  -d '{"email":"user@example.com"}'`}
+  </CodeBlock>
+  <CodeBlock filename="Response" language="json">
+    {`{
+  "token": "eyJhbGci...",
+  "expires_in": 3600
+}`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+### Dark theme
+
+Force the dark code UI with `codeBlockTheme="dark"` — useful on marketing or landing pages where you want rich dark code blocks regardless of the user's system preference.
+
+```tsx
+<CodeGroup codeBlockTheme="dark">
+  <CodeBlock filename="client.ts" icon="typescript" language="typescript">
+    {`import { createClient } from '@supabase/supabase-js';
+
+export const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!,
+);`}
+  </CodeBlock>
+  <CodeBlock filename="client.js" icon="js" language="javascript">
+    {`import { createClient } from '@supabase/supabase-js';
+
+export const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY,
+);`}
+  </CodeBlock>
+</CodeGroup>
+```
+
+## Copy behavior
+
+The copy button in the group's header always copies the code from the **currently active** tab. Switching tabs updates what gets copied.
+
+## Tab labels
+
+Each child `CodeBlock`'s `filename` prop is the only source of the tab label — there is no separate label prop on `CodeGroup`. Always set `filename` on every child.
+
+<Warning>
+  Omitting `filename` on a `CodeBlock` child leaves that tab with a blank label. Always provide a descriptive `filename` for every child in a `CodeGroup`.
+</Warning>

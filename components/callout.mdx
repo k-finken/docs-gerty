@@ -1,0 +1,198 @@
+---
+title: "Callout: Contextual Inline Alerts and Notes"
+sidebarTitle: "Callout"
+description: "Highlight important messages with semantic color-coded callouts. Choose from six built-in variants or create custom-colored callouts for any use case."
+---
+
+Use `Callout` to draw the reader's eye to information that sits outside the main narrative: warnings before a destructive action, tips that save time, notes clarifying an edge case, or success confirmations.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Callout } from '@mintlify/components';
+
+// Or import named aliases directly
+import { Info, Warning, Note, Tip, Check, Danger } from '@mintlify/components';
+```
+
+## Basic usage
+
+Pass a `variant` prop to select the semantic style. Every variant ships with a matching icon, background color, and border — in both light and dark mode.
+
+```tsx
+<Callout variant="info">
+  This API is available in all regions.
+</Callout>
+
+<Callout variant="warning">
+  Deleting a project is permanent and cannot be undone.
+</Callout>
+```
+
+## Props
+
+<ParamField path="children" type="ReactNode" required>
+  The body content of the callout. Supports rich content — paragraphs, lists, code, and links all render correctly inside.
+</ParamField>
+
+<ParamField path="variant" type='"info" | "warning" | "note" | "tip" | "check" | "danger" | "custom"' default='"custom"'>
+  Controls the icon, background, and border color of the callout. Omit this prop (or use `"custom"`) to provide your own icon and color.
+</ParamField>
+
+<ParamField path="title" type="string">
+  Optional bold heading rendered above the children.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode | string">
+  Override the default variant icon. Pass a FontAwesome icon name as a string or any React node. Only used when `variant` is `"custom"`.
+</ParamField>
+
+<ParamField path="iconType" type='"solid" | "regular" | "brands" | "duotone" | "light" | "thin"'>
+  FontAwesome icon style. Only used when `icon` is a string name.
+</ParamField>
+
+<ParamField path="iconLibrary" type='"fontawesome" | "lucide"'>
+  Icon library to use when `icon` is a string. Defaults to FontAwesome.
+</ParamField>
+
+<ParamField path="color" type="string">
+  A CSS color value (hex, `rgb()`, named color, etc.) used to derive the background and border tints for `variant="custom"` callouts. The component automatically computes light and dark mode tints from this base color.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outer container.
+</ParamField>
+
+<ParamField path="ariaLabel" type="string">
+  Accessible label for the callout's icon. Defaults to the variant name (e.g. `"Warning"`). Override this for non-English documentation.
+</ParamField>
+
+## Variants
+
+All six built-in variants come with a distinctive color scheme and icon:
+
+<Tabs>
+  <Tabs.Item title="info">
+    ```tsx
+    <Callout variant="info" title="Rate limits">
+      The API allows up to 1,000 requests per minute per API key.
+    </Callout>
+    ```
+    Renders with a neutral gray background. Use it for general-purpose supplementary information.
+  </Tabs.Item>
+  <Tabs.Item title="warning">
+    ```tsx
+    <Callout variant="warning" title="Breaking change">
+      This endpoint was updated in v2.0. Update your integration before migrating.
+    </Callout>
+    ```
+    Renders with a yellow background and exclamation icon. Use it for situations that require attention before proceeding.
+  </Tabs.Item>
+  <Tabs.Item title="note">
+    ```tsx
+    <Callout variant="note" title="Authentication required">
+      All requests must include a valid Bearer token in the Authorization header.
+    </Callout>
+    ```
+    Renders with a blue background. Use it for clarifying footnotes and supplementary context.
+  </Tabs.Item>
+  <Tabs.Item title="tip">
+    ```tsx
+    <Callout variant="tip" title="Speed up your build">
+      Enable incremental builds in your `mint.json` to skip unchanged pages.
+    </Callout>
+    ```
+    Renders with a green background and lightbulb icon. Use it for shortcuts and best practices.
+  </Tabs.Item>
+  <Tabs.Item title="check">
+    ```tsx
+    <Callout variant="check" title="Setup complete">
+      Your API keys are verified. You can start making requests.
+    </Callout>
+    ```
+    Renders with a green background and check icon. Use it to confirm that a prerequisite or step is complete.
+  </Tabs.Item>
+  <Tabs.Item title="danger">
+    ```tsx
+    <Callout variant="danger" title="Irreversible action">
+      Calling this endpoint permanently deletes all data in the workspace.
+    </Callout>
+    ```
+    Renders with a red background and skull icon. Use it to warn about destructive or security-sensitive operations.
+  </Tabs.Item>
+</Tabs>
+
+## Named aliases
+
+For convenience, `@mintlify/components` exports a named component for each built-in variant. These are equivalent to using `<Callout variant="...">`:
+
+```tsx
+<Info>Informational content.</Info>
+
+<Warning>Be careful before proceeding.</Warning>
+
+<Note title="Authentication">You must provide a valid API key.</Note>
+
+<Tip>Enable caching to reduce your API usage.</Tip>
+
+<Check>Your account is now verified.</Check>
+
+<Danger>This action cannot be reversed.</Danger>
+```
+
+<Tip>
+  Prefer the named aliases when you always know the variant at authoring time — they're more concise and skip the `variant` prop entirely.
+</Tip>
+
+## Custom variant
+
+Set `variant="custom"` (or omit the `variant` prop) to build your own callout with a specific brand color. The component derives accessible background and border tints from the `color` value automatically.
+
+```tsx
+<Callout
+  variant="custom"
+  color="#9333ea"
+  icon="wand-magic-sparkles"
+  iconType="solid"
+  title="Pro feature"
+>
+  Custom workflows are available on Pro and Enterprise plans.
+</Callout>
+```
+
+If you omit `color`, the callout falls back to a neutral gray style — useful when you want the custom icon but no tinted background.
+
+```tsx
+<Callout
+  variant="custom"
+  icon="flask"
+  iconType="solid"
+  title="Experimental"
+>
+  This feature is experimental and may change without notice.
+</Callout>
+```
+
+## Rich content
+
+Callout children support the full Mintlify prose style — paragraphs, bold text, inline code, lists, and links all render correctly:
+
+```tsx
+<Callout variant="note" title="Before you start">
+  Make sure you have completed the following:
+
+  - Created a Mintlify account
+  - Generated an API key from the **Settings** page
+  - Installed the [`@mintlify/cli`](https://www.npmjs.com/package/@mintlify/cli) package
+</Callout>
+```
+
+## Dark mode
+
+Every built-in variant includes `dark:` styles. Custom color callouts also receive automatic dark-mode tinting derived from the provided `color` value. No additional configuration is needed.

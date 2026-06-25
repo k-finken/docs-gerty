@@ -1,0 +1,213 @@
+---
+title: "Property: API Parameter Documentation Block"
+sidebarTitle: "Property"
+description: "Document individual API parameters and object properties with name, type, location badges, default values, required and deprecated flags, and rich descriptions."
+---
+
+Use the `Property` component to document a single API parameter or object field in your reference pages. It renders a structured block containing the parameter name, type annotation, location badge (query, body, header, path), and any status flags — followed by a free-form description body where you can include prose, code examples, or nested `Expandable` blocks.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Property } from '@mintlify/components';
+```
+
+## Basic Usage
+
+```tsx
+<Property name="user_id" type="string" required>
+  The unique identifier for the user. You can find this value in the
+  dashboard under **Settings → Account**.
+</Property>
+```
+
+---
+
+## Props
+
+<ParamField path="name" type="string" required>
+  The parameter or property name displayed as the primary heading.
+</ParamField>
+
+<ParamField path="type" type="string">
+  The data type of the parameter (e.g. `string`, `integer`, `boolean`, `object`, `array`). Rendered as a secondary label next to the name.
+</ParamField>
+
+<ParamField path="location" type="string">
+  Where the parameter is sent in the request. Common values: `"query"`, `"body"`, `"header"`, `"path"`. Displayed as a badge.
+</ParamField>
+
+<ParamField path="required" type="boolean">
+  When `true`, displays a "Required" badge. Defaults to `false`.
+</ParamField>
+
+<ParamField path="deprecated" type="boolean">
+  When `true`, displays a "Deprecated" badge. Defaults to `false`.
+</ParamField>
+
+<ParamField path="hidden" type="boolean">
+  When `true`, the entire component renders nothing (`null`). Use this to conditionally hide a property without removing it from your source.
+</ParamField>
+
+<ParamField path="default" type="string">
+  The default value shown in the parameter head when no value is provided by the caller.
+</ParamField>
+
+<ParamField path="children" type="ReactNode" required>
+  The description body. Supports any React content including markdown prose, code blocks, and nested components.
+</ParamField>
+
+<ParamField path="id" type="string">
+  An HTML `id` attribute applied to the property container, enabling direct anchor links.
+</ParamField>
+
+<ParamField path="pre" type="ReactNode">
+  Content rendered immediately before the parameter head — useful for custom dividers or grouping labels.
+</ParamField>
+
+<ParamField path="post" type="ReactNode">
+  Content rendered immediately after the description body.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names applied to the root container.
+</ParamField>
+
+<ParamField path="onMount" type="(id: string) => void">
+  Callback invoked on mount, receiving the `id` prop. Useful for registering the property in a navigation index.
+</ParamField>
+
+<ParamField path="navigateToHeaderAriaLabel" type="string">
+  Custom `aria-label` for the "link to this section" anchor icon shown on hover.
+</ParamField>
+
+<ParamField path="defaultLabel" type="string">
+  Custom label text for the default value badge. Defaults to `"Default"`.
+</ParamField>
+
+<ParamField path="requiredLabel" type="string">
+  Custom label text for the required badge. Defaults to `"Required"`.
+</ParamField>
+
+<ParamField path="deprecatedLabel" type="string">
+  Custom label text for the deprecated badge. Defaults to `"Deprecated"`.
+</ParamField>
+
+---
+
+## Examples
+
+### Required Parameter
+
+```tsx
+<Property name="email" type="string" required>
+  The user's email address. Must be a valid RFC 5322 address. This field
+  is case-insensitive.
+</Property>
+```
+
+### Optional Parameter with Default
+
+```tsx
+<Property name="page_size" type="integer" default="20">
+  Number of results to return per page. Must be between `1` and `100`.
+</Property>
+```
+
+### Located in Query String
+
+```tsx
+<Property name="cursor" type="string" location="query">
+  An opaque pagination cursor returned in the previous response. Pass this
+  value to retrieve the next page of results.
+</Property>
+```
+
+### Header Parameter
+
+```tsx
+<Property name="Idempotency-Key" type="string" location="header">
+  A unique key (UUID v4 recommended) that prevents duplicate requests. If
+  you retry a request with the same key within 24 hours, the server returns
+  the original response without re-executing the operation.
+</Property>
+```
+
+### Deprecated Parameter
+
+```tsx
+<Property name="legacy_id" type="string" deprecated>
+  **Deprecated.** Use `user_id` instead. This field will be removed in API
+  version 4.0.
+</Property>
+```
+
+### Nested Object Fields
+
+Combine `Property` with `Expandable` to document nested object structures:
+
+```tsx
+<Property name="address" type="object">
+  The recipient's shipping address.
+
+  <Expandable title="address fields">
+    <Property name="line1" type="string" required>
+      Street address, P.O. box, or company name.
+    </Property>
+    <Property name="line2" type="string">
+      Apartment, suite, unit, or floor number.
+    </Property>
+    <Property name="city" type="string" required>
+      City, town, or village.
+    </Property>
+    <Property name="postal_code" type="string" required>
+      ZIP or postal code.
+    </Property>
+    <Property name="country" type="string" required>
+      Two-letter ISO 3166-1 alpha-2 country code.
+    </Property>
+  </Expandable>
+</Property>
+```
+
+### Hidden Property
+
+Set `hidden` to conditionally remove a field from the rendered output without deleting it from your source file:
+
+```tsx
+<Property name="internal_trace_id" type="string" hidden>
+  Internal tracing identifier — not exposed to end users.
+</Property>
+```
+
+### Custom Badge Labels
+
+Override badge text for localized or domain-specific documentation:
+
+```tsx
+<Property
+  name="api_key"
+  type="string"
+  required
+  requiredLabel="Mandatory"
+  defaultLabel="Inherited"
+  default="project-level key"
+>
+  Your API key for authentication. If omitted, the project-level key is used.
+</Property>
+```
+
+---
+
+## Accessibility
+
+- Each `Property` block renders with semantic heading-level markup so screen readers can navigate between parameters.
+- When `id` is provided, an anchor icon appears on hover, allowing users to copy a direct link to that specific property.
+- The `navigateToHeaderAriaLabel` prop lets you customise the label of that anchor for non-English documentation.
+- Setting `hidden={true}` removes the element entirely from the DOM, so hidden properties are invisible to both sighted users and assistive technologies.

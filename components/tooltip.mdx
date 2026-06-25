@@ -1,0 +1,189 @@
+---
+title: "Tooltip: Contextual Hover and Tap Popups"
+sidebarTitle: "Tooltip"
+description: "Attach contextual popups to any element — with an optional title, description text, and CTA link — triggered on hover for pointer devices and tap for touch screens."
+---
+
+Use the `Tooltip` component to surface supplementary information without cluttering the page. The tooltip appears on hover for mouse users and toggles on tap for touch-screen users. It supports plain text and interactive trigger elements, and can include a title, description, and a call-to-action link.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Tooltip } from '@mintlify/components';
+```
+
+## Basic Usage
+
+```tsx
+<Tooltip description="The unique identifier assigned to this resource.">
+  <span>resource_id</span>
+</Tooltip>
+```
+
+---
+
+## Props
+
+<ParamField path="description" type="string" required>
+  The main body text of the tooltip popup. Displayed in a muted, small font.
+</ParamField>
+
+<ParamField path="children" type="ReactNode" required>
+  The element that triggers the tooltip. Plain text nodes and `<span>` elements receive a dotted underline to signal interactivity. Interactive elements such as `<button>`, `<a>`, and `<input>` are used directly as the trigger without an extra wrapper (via `renderAsChild`).
+</ParamField>
+
+<ParamField path="title" type="string">
+  An optional bold heading rendered above the description inside the popup.
+</ParamField>
+
+<ParamField path="cta" type="string">
+  Label text for an optional call-to-action link shown at the bottom of the popup. Requires `href` to be set.
+</ParamField>
+
+<ParamField path="href" type="string">
+  The URL the call-to-action link navigates to. Requires `cta` to be set.
+</ParamField>
+
+<ParamField path="side" type="'top' | 'right' | 'bottom' | 'left'">
+  The preferred side of the trigger on which the popup appears. The tooltip will automatically flip if there is insufficient space. Defaults to `"top"`.
+</ParamField>
+
+<ParamField path="align" type="'start' | 'center' | 'end'">
+  Alignment of the popup relative to the trigger element. Defaults to `"center"`.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names applied to the tooltip trigger wrapper.
+</ParamField>
+
+---
+
+## Examples
+
+### Description Only
+
+The simplest form — just a description:
+
+```tsx
+<Tooltip description="Responses are cached for up to 60 seconds.">
+  <span>cache_ttl</span>
+</Tooltip>
+```
+
+Plain text children automatically receive a dotted underline decoration to signal to users that hovering will reveal more information.
+
+### With a Title
+
+Add a `title` to give the popup a bold heading:
+
+```tsx
+<Tooltip title="Rate limit" description="Maximum of 100 requests per minute per API key.">
+  <span>X-RateLimit-Limit</span>
+</Tooltip>
+```
+
+### With a Call-to-Action Link
+
+Include a `cta` and `href` to link users to related documentation:
+
+```tsx
+<Tooltip
+  title="Webhook signature"
+  description="A HMAC-SHA256 signature used to verify the request originates from our servers."
+  cta="Read the verification guide"
+  href="/webhooks/security"
+>
+  <span>X-Webhook-Signature</span>
+</Tooltip>
+```
+
+### Wrapping an Interactive Element
+
+When the child is a `<button>`, `<a>`, or `<input>`, the tooltip attaches directly to it without adding an extra DOM node:
+
+```tsx
+<Tooltip description="Opens the settings panel for this workspace.">
+  <button type="button">Settings</button>
+</Tooltip>
+```
+
+<Note>
+  Interactive children render using `renderAsChild`, meaning the tooltip trigger IS the button or link. This preserves native focus styles and avoids invalid HTML nesting.
+</Note>
+
+### Positioning
+
+Control which side the popup prefers to open on:
+
+```tsx
+// Appears below the trigger
+<Tooltip side="bottom" description="This value is auto-calculated.">
+  <span>computed_at</span>
+</Tooltip>
+
+// Appears to the right, aligned to the start
+<Tooltip side="right" align="start" description="ISO 8601 timestamp.">
+  <span>created_at</span>
+</Tooltip>
+```
+
+### Touch Device Behavior
+
+On touch devices, the tooltip toggles on tap rather than hover. A second tap dismisses it. You do not need to do anything special — this behavior is automatic.
+
+<Tip>
+  Because touch users toggle the tooltip with a tap, avoid placing important actions inside the popup that require precise interaction — use a modal or drawer instead.
+</Tip>
+
+---
+
+## Typical Use Cases
+
+<AccordionGroup>
+  <Accordion title="Glossary terms">
+    Wrap technical terms in your documentation with a Tooltip to provide inline definitions without breaking the reading flow.
+
+    ```tsx
+    <Tooltip
+      title="Idempotent"
+      description="An operation that produces the same result whether it is performed once or multiple times."
+      cta="Learn more"
+      href="/concepts/idempotency"
+    >
+      <span>idempotent</span>
+    </Tooltip>
+    ```
+  </Accordion>
+
+  <Accordion title="Color swatch hex values">
+    The `Color` component uses Tooltip internally in the `table` variant to show hex values on hover before the user clicks to copy.
+  </Accordion>
+
+  <Accordion title="Icon buttons">
+    Wrap icon-only buttons to provide a text label for users who are not familiar with the icon's meaning.
+
+    ```tsx
+    <Tooltip description="Copy to clipboard">
+      <button type="button" aria-label="Copy">
+        <CopyIcon />
+      </button>
+    </Tooltip>
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Accessibility
+
+- The tooltip popup is built on `@base-ui-react/tooltip`, which manages `aria-describedby` linking between the trigger and the popup content automatically.
+- Plain-text triggers receive a visible dotted underline to communicate interactivity to sighted users.
+- On touch devices, the tap-to-toggle behaviour means touch users can always access tooltip content without requiring hover capability.
+- The `title` prop inside the popup is announced as part of the accessible description, giving screen reader users additional context.
+- Use the `cta` + `href` combination sparingly — ensure the link destination is reachable without the tooltip for keyboard and assistive technology users.

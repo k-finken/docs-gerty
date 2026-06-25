@@ -1,0 +1,215 @@
+---
+title: "Frame: Styled Media Containers with Grid Backgrounds"
+sidebarTitle: "Frame"
+description: "Wrap screenshots, videos, and UI previews in a styled container with a grid background, rounded corners, an optional title header, and a caption."
+---
+
+Use `Frame` to present visual content — screenshots, embedded videos, live UI demos — in a way that separates it clearly from surrounding prose. The grid-pattern background provides visual context so images without explicit borders don't blend into the page, and the optional title and description let you add structured annotation without breaking the reading flow.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```jsx
+import { Frame } from '@mintlify/components'
+```
+
+## Basic usage
+
+```jsx
+<Frame>
+  <img src="/images/dashboard-overview.png" alt="Dashboard overview" />
+</Frame>
+```
+
+---
+
+## Props
+
+<ParamField path="children" type="ReactNode" required>
+  The content to display inside the frame. Typically an `<img>`, `<video>`, an `<iframe>`, or a custom component. The frame constrains overflow and centres its content automatically.
+</ParamField>
+
+<ParamField path="title" type="string">
+  A short label shown **above** the frame container with a decorative icon. Use it to name a diagram, UI section, or screenshot so readers know what they're looking at before their eyes land on the image.
+</ParamField>
+
+<ParamField path="description" type="string">
+  A caption rendered **below** the content, inside the frame boundary. Suitable for alt-text style context, figure numbers, or brief explanations.
+</ParamField>
+
+<ParamField path="renderDescription" type="(description: string) => ReactNode">
+  A custom renderer for the `description` string. Defaults to wrapping the text in a `<p>` tag. Pass your own function to render rich markup — links, inline code, or formatted text — in the caption area.
+</ParamField>
+
+<ParamField path="as" type='"div"'>
+  The HTML element used for the inner frame container. Currently only `"div"` is supported.
+</ParamField>
+
+<ParamField path="style" type="CSSProperties">
+  Inline styles applied to the inner frame container. Use this to constrain height, set a fixed aspect ratio, or apply a custom background colour.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes on the outermost wrapper element. Use it to control width, add margin, or override layout behaviour.
+</ParamField>
+
+---
+
+## Examples
+
+### Basic screenshot frame
+
+Wrap any image to lift it off the page and provide a consistent visual treatment.
+
+```jsx
+<Frame>
+  <img
+    src="/images/editor-screenshot.png"
+    alt="The visual editor with a blank page open"
+  />
+</Frame>
+```
+
+### Frame with a title
+
+Add a title header to orient the reader before they look at the image. The header includes a small decorative icon drawn from the component's internal SVG — no extra configuration needed.
+
+```jsx
+<Frame title="Project settings panel">
+  <img
+    src="/images/settings-panel.png"
+    alt="Settings panel showing theme, language, and API options"
+  />
+</Frame>
+```
+
+### Frame with a description caption
+
+Use `description` to add a figure caption below the content. It sits inside the frame boundary, separated visually from the main body of the image.
+
+```jsx
+<Frame description="Figure 1 — The onboarding flow as seen by a first-time user">
+  <img
+    src="/images/onboarding-flow.png"
+    alt="Onboarding wizard with three steps"
+  />
+</Frame>
+```
+
+### Frame with both title and description
+
+Combine `title` and `description` for fully annotated media — useful in technical references where precision matters.
+
+```jsx
+<Frame
+  title="Request lifecycle"
+  description="Each request passes through auth, rate-limiting, and routing before reaching a handler."
+>
+  <img
+    src="/images/request-lifecycle.png"
+    alt="Diagram of the request lifecycle"
+  />
+</Frame>
+```
+
+### Custom description renderer
+
+When your caption needs more than plain text, pass a `renderDescription` function to render arbitrary React content.
+
+```jsx
+<Frame
+  title="API response example"
+  description="response"
+  renderDescription={(text) => (
+    <p>
+      The <code>{text}</code> object always includes a <code>requestId</code>{' '}
+      field for support queries. See the{' '}
+      <a href="/api-reference/errors">error reference</a> for status codes.
+    </p>
+  )}
+>
+  <img src="/images/api-response.png" alt="JSON response from the API" />
+</Frame>
+```
+
+### Embedding a video
+
+`Frame` works with any content that renders inside a `<div>`. Use it to give embedded videos the same polished treatment as screenshots.
+
+<Tabs>
+  <Tab title="HTML video">
+    ```jsx
+    <Frame title="Feature walkthrough" description="Recorded at 1920×1080, 60 fps">
+      <video autoPlay loop muted playsInline>
+        <source src="/videos/feature-walkthrough.mp4" type="video/mp4" />
+      </video>
+    </Frame>
+    ```
+  </Tab>
+  <Tab title="YouTube embed">
+    ```jsx
+    <Frame title="Getting started video">
+      <iframe
+        width="100%"
+        height="400"
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        title="Getting started with the platform"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </Frame>
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  `Frame` automatically calls `enhanceVideoProps` on its children. This adds sensible defaults (such as `playsInline`) to `<video>` elements to prevent unexpected full-screen behaviour on iOS and other mobile browsers.
+</Note>
+
+### Controlling dimensions with `style`
+
+Constrain the frame's inner height when your image or embed has a natural aspect ratio that doesn't suit the page layout.
+
+```jsx
+<Frame style={{ height: '320px' }}>
+  <img
+    src="/images/wide-banner.png"
+    alt="Feature banner"
+    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+  />
+</Frame>
+```
+
+### Side-by-side comparison with Columns
+
+Pair `Frame` with [`Columns`](/components/columns) to show before/after screenshots or light/dark mode previews.
+
+```jsx
+import { Frame, Columns } from '@mintlify/components'
+
+<Columns cols={2}>
+  <Frame title="Before" description="Default theme">
+    <img src="/images/before.png" alt="Interface before the redesign" />
+  </Frame>
+  <Frame title="After" description="Refreshed theme">
+    <img src="/images/after.png" alt="Interface after the redesign" />
+  </Frame>
+</Columns>
+```
+
+---
+
+## Behaviour notes
+
+**Grid background pattern** — The decorative grid behind your content uses a semi-transparent `bg-grid-stone-200/20` pattern in light mode and `bg-grid-white/5` in dark mode. The pattern is masked with a gradient so it fades towards the edges and never competes with your content.
+
+**Dark mode** — All surface colours (background, border, description text) flip automatically with the user's theme. You don't need to add any `dark:` classes yourself.
+
+**Content centring** — The inner content wrapper uses `flex` with `justify-center` and `items-center`, so your content is always horizontally centred regardless of its intrinsic size. If you need content to stretch to fill the frame, add `className="w-full"` to the element inside.
+
+**Overflow clipping** — The inner wrapper clips overflow with `overflow-hidden` and applies `rounded-xl`. Images and videos with dimensions larger than the frame are cropped cleanly at the border radius.

@@ -1,0 +1,213 @@
+---
+title: "Tree: Accessible File and Folder Hierarchy"
+sidebarTitle: "Tree"
+description: "Render interactive file-system trees with collapsible folders, WAI-ARIA keyboard navigation, roving tabindex focus management, and type-ahead search."
+---
+
+Use the `Tree` compound component to visualise hierarchical file and folder structures in your documentation. The component implements the full [WAI-ARIA Tree View pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/), including keyboard navigation, roving tabindex focus management, and type-ahead filtering — making it usable by keyboard and assistive technology users out of the box.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Tree } from '@mintlify/components';
+```
+
+## Basic Usage
+
+```tsx
+<Tree>
+  <Tree.Folder name="src">
+    <Tree.File name="index.ts" />
+    <Tree.File name="app.tsx" />
+    <Tree.Folder name="components">
+      <Tree.File name="Button.tsx" />
+      <Tree.File name="Modal.tsx" />
+    </Tree.Folder>
+  </Tree.Folder>
+  <Tree.File name="package.json" />
+  <Tree.File name="tsconfig.json" />
+</Tree>
+```
+
+---
+
+## Components
+
+### Tree (root)
+
+The root container. Renders a `div` with `role="tree"` and wires up all keyboard event handlers and roving tabindex logic.
+
+<ParamField path="children" type="ReactNode" required>
+  One or more `Tree.Folder` or `Tree.File` components.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS class names applied to the root `div`.
+</ParamField>
+
+---
+
+### Tree.File
+
+Represents a leaf node in the tree — a single file with no children.
+
+<ParamField path="name" type="string" required>
+  The filename displayed next to the file icon. The full string is also set as the `title` attribute for long names that may be truncated.
+</ParamField>
+
+---
+
+### Tree.Folder
+
+Represents a branch node in the tree — a named folder that can be expanded and collapsed.
+
+<ParamField path="name" type="string" required>
+  The folder name displayed next to the folder icon.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  When `true`, the folder starts in the expanded state. Defaults to `false`.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The contents of the folder — nested `Tree.File` or `Tree.Folder` components. If no children are provided, the folder is rendered in a non-openable state (no toggle).
+</ParamField>
+
+<ParamField path="openable" type="boolean">
+  Controls whether the folder can be opened and closed. Defaults to `true`. Set to `false` to render a folder that looks interactive but does not expand — useful for placeholder or locked folders.
+</ParamField>
+
+---
+
+## Examples
+
+### Simple Project Structure
+
+```tsx
+<Tree>
+  <Tree.Folder name="my-project" defaultOpen>
+    <Tree.Folder name="src">
+      <Tree.File name="main.ts" />
+      <Tree.File name="config.ts" />
+    </Tree.Folder>
+    <Tree.Folder name="tests">
+      <Tree.File name="main.test.ts" />
+    </Tree.Folder>
+    <Tree.File name="package.json" />
+    <Tree.File name="README.md" />
+  </Tree.Folder>
+</Tree>
+```
+
+### Monorepo Layout
+
+```tsx
+<Tree>
+  <Tree.Folder name="packages" defaultOpen>
+    <Tree.Folder name="core">
+      <Tree.Folder name="src">
+        <Tree.File name="index.ts" />
+      </Tree.Folder>
+      <Tree.File name="package.json" />
+    </Tree.Folder>
+    <Tree.Folder name="ui">
+      <Tree.Folder name="src">
+        <Tree.File name="Button.tsx" />
+        <Tree.File name="Input.tsx" />
+      </Tree.Folder>
+      <Tree.File name="package.json" />
+    </Tree.Folder>
+  </Tree.Folder>
+  <Tree.File name="pnpm-workspace.yaml" />
+  <Tree.File name="turbo.json" />
+</Tree>
+```
+
+### Open Multiple Folders by Default
+
+Pass `defaultOpen` to each folder you want expanded on first render:
+
+```tsx
+<Tree>
+  <Tree.Folder name="app" defaultOpen>
+    <Tree.Folder name="(auth)" defaultOpen>
+      <Tree.File name="login/page.tsx" />
+      <Tree.File name="register/page.tsx" />
+    </Tree.Folder>
+    <Tree.Folder name="(dashboard)">
+      <Tree.File name="page.tsx" />
+      <Tree.File name="layout.tsx" />
+    </Tree.Folder>
+    <Tree.File name="layout.tsx" />
+  </Tree.Folder>
+</Tree>
+```
+
+### Non-Openable Folder
+
+A folder without children (or with `openable={false}`) renders as a static, non-interactive item:
+
+```tsx
+<Tree>
+  <Tree.Folder name="dist" openable={false} />
+  <Tree.Folder name="node_modules" openable={false} />
+  <Tree.File name="package.json" />
+</Tree>
+```
+
+<Note>
+  A `Tree.Folder` with no `children` prop is automatically non-openable, regardless of the `openable` prop value.
+</Note>
+
+### Highlighting a Specific File
+
+Use `className` on the root `Tree` component for container-level styling, or wrap the tree in a container with a highlighted border:
+
+```tsx
+<Tree>
+  <Tree.Folder name="src" defaultOpen>
+    <Tree.File name="index.ts" />
+    <Tree.File name="middleware.ts" />
+    <Tree.File name="routes.ts" />
+  </Tree.Folder>
+</Tree>
+```
+
+<Tip>
+  To call out a specific file, consider using a `Note` or `Tip` callout immediately after the `Tree` component with the filename in backticks — for example: *The entry point is `src/index.ts`.*
+</Tip>
+
+---
+
+## Keyboard Navigation
+
+The `Tree` component implements the full WAI-ARIA Tree View keyboard interaction model:
+
+| Key | Action |
+|-----|--------|
+| <kbd>↓</kbd> | Move focus to the next visible tree item |
+| <kbd>↑</kbd> | Move focus to the previous visible tree item |
+| <kbd>→</kbd> | Expand a closed folder; move focus to the first child of an open folder |
+| <kbd>←</kbd> | Collapse an open folder; move focus to the parent folder |
+| <kbd>Home</kbd> | Move focus to the first item in the tree |
+| <kbd>End</kbd> | Move focus to the last visible item in the tree |
+| <kbd>Enter</kbd> / <kbd>Space</kbd> | Toggle the focused folder open or closed |
+| <kbd>*</kbd> | Expand all sibling folders of the currently focused item |
+| Any printable character | Type-ahead: jump to the next item whose name starts with the typed characters (500 ms buffer) |
+
+---
+
+## Accessibility
+
+- The root element has `role="tree"` and `aria-label="File tree"`.
+- Each folder has `role="treeitem"` with `aria-expanded` reflecting its open/closed state and `aria-level` indicating depth.
+- Each file has `role="treeitem"` with `aria-selected={false}` and `aria-level` indicating depth.
+- Folder children are wrapped in a `role="group"` container identified by `aria-owns`.
+- Focus is managed with the roving tabindex pattern — only one item in the tree has `tabindex="0"` at a time; all others are `tabindex="-1"`. This means pressing <kbd>Tab</kbd> moves focus into and out of the tree as a single unit.
+- Type-ahead search accumulates characters for 500 ms before resetting, allowing multi-character prefix matching (e.g. typing `co` quickly to jump to `components`).

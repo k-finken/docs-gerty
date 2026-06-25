@@ -1,0 +1,159 @@
+---
+title: "Install Mintlify Components in Your Project"
+sidebarTitle: "Installation"
+description: "Install @mintlify/components from npm and set up Tailwind CSS styles in under five minutes with this step-by-step guide."
+---
+
+This guide walks you through adding `@mintlify/components` to an existing React project and configuring the required Tailwind CSS styles. The whole process takes under five minutes and works with both Tailwind CSS v3 and v4.
+
+<Note>
+  **Before you begin**, make sure your project meets the following requirements:
+
+  | Requirement | Version |
+  |---|---|
+  | Node.js | >= 20 |
+  | React | 18 or 19 |
+  | Tailwind CSS | v3 or v4 |
+
+  React and Tailwind CSS are peer dependencies and must already be installed in
+  your project.
+</Note>
+
+<Steps>
+  <Step title="Install the package">
+    Install `@mintlify/components` using your preferred package manager.
+
+    <CodeGroup>
+      ```bash npm
+      npm install @mintlify/components
+      ```
+
+      ```bash pnpm
+      pnpm add @mintlify/components
+      ```
+
+      ```bash yarn
+      yarn add @mintlify/components
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Set up Tailwind CSS styles">
+    Import the component stylesheet into your global CSS file. The exact syntax
+    depends on which version of Tailwind CSS you are using.
+
+    <Tabs>
+      <Tab title="Tailwind CSS v4">
+        Add the import at the **top** of your global CSS file, before the
+        `@import "tailwindcss"` line. Then define your primary brand color
+        inside an `@theme {}` block.
+
+        ```css
+        @import "@mintlify/components/styles.css";
+        @import "tailwindcss";
+
+        @theme {
+          --color-primary: #your-color;
+        }
+        ```
+
+        Replace `#your-color` with your brand's primary hex value — for
+        example, `#0ea5e9` for sky blue.
+
+        <Warning>
+          The `@mintlify/components/styles.css` import **must** appear before
+          `@import "tailwindcss"`. If you reverse the order, Tailwind's reset
+          will override component styles and your UI will look broken.
+        </Warning>
+      </Tab>
+
+      <Tab title="Tailwind CSS v3">
+        Add the import at the **top** of your global CSS file, before the
+        `@tailwind` directives.
+
+        ```css
+        @import "@mintlify/components/styles.css";
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        ```
+
+        To set your primary brand color, extend the Tailwind theme in
+        `tailwind.config.js`:
+
+        ```js tailwind.config.js
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+          theme: {
+            extend: {
+              colors: {
+                primary: '#your-color',
+              },
+            },
+          },
+          plugins: [],
+        };
+        ```
+
+        <Warning>
+          As with v4, the `@import "@mintlify/components/styles.css"` line must
+          come before any `@tailwind` directives to ensure correct cascade
+          ordering.
+        </Warning>
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Import and use a component">
+    Import any component from the package by name and render it in your JSX.
+    All exports are named exports — there is no default export.
+
+    ```tsx
+    import { Callout, Accordion, CodeBlock } from '@mintlify/components';
+
+    export default function GettingStartedPage() {
+      return (
+        <div>
+          <Callout type="info">
+            Welcome! You have successfully set up Mintlify Components.
+          </Callout>
+
+          <Accordion title="What components are available?">
+            The library ships 22 components covering callouts, code blocks,
+            tabs, accordions, diagrams, and more.
+          </Accordion>
+        </div>
+      );
+    }
+    ```
+
+    <Tip>
+      All components are tree-shakeable. Only the components you actually import
+      will be included in your production bundle — unused components add zero
+      overhead.
+    </Tip>
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<Accordion title="Components render without styles">
+  This usually means `@mintlify/components/styles.css` was not imported, or it
+  was imported **after** the Tailwind CSS import. Check that your global CSS
+  file has the import at the very top, before any Tailwind directive.
+</Accordion>
+
+<Accordion title="TypeScript errors on import">
+  Ensure you are running Node.js >= 20 and that your `tsconfig.json` has
+  `"moduleResolution": "bundler"` or `"node16"` / `"nodenext"`. The package
+  ships its own type declarations, so no `@types/` package is needed.
+</Accordion>
+
+<Accordion title="Peer dependency warnings">
+  The package requires React 18 or 19 and Tailwind CSS v3 or v4 as peer
+  dependencies. If you see warnings, verify that compatible versions of both
+  packages are listed in your `package.json` dependencies.
+</Accordion>
+
+Next, learn how to [customize the look and feel](/theming) of all components using Tailwind design tokens.

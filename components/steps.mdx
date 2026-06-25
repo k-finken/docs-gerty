@@ -1,0 +1,226 @@
+---
+title: "Steps: Numbered Sequential Process Guides"
+sidebarTitle: "Steps"
+description: "Walk readers through multi-step processes with auto-numbered steps, connector lines, optional icons, and anchor links for deep-linking to any step."
+---
+
+Use `Steps` whenever a task must be completed in order — onboarding flows, installation guides, configuration walkthroughs, or any sequence where skipping a step would cause problems downstream.
+
+## Installation
+
+```bash
+npm install @mintlify/components
+```
+
+## Import
+
+```tsx
+import { Steps } from '@mintlify/components';
+```
+
+## Basic usage
+
+Wrap `Steps.Item` components inside `Steps`. Each item receives its step number automatically — you don't need to set them manually.
+
+```tsx
+<Steps>
+  <Steps.Item title="Install the CLI">
+    Run `npm install -g @mintlify/cli` to install the Mintlify CLI globally.
+  </Steps.Item>
+  <Steps.Item title="Initialize your project">
+    Navigate to your docs folder and run `mintlify init`.
+  </Steps.Item>
+  <Steps.Item title="Start the dev server">
+    Run `mintlify dev` to preview your docs at `http://localhost:3000`.
+  </Steps.Item>
+</Steps>
+```
+
+## Props
+
+### Steps
+
+<ParamField path="children" type="ReactElement<StepsItemProps> | ReactElement<StepsItemProps>[]" required>
+  One or more `Steps.Item` components. The parent automatically injects the `stepNumber` and `isLast` props into each child.
+</ParamField>
+
+<ParamField path="titleSize" type='"p" | "h2" | "h3" | "h4"' default='"p"'>
+  The heading element used for every step title in this group. Set `"h2"` or `"h3"` when step titles should appear in the page's heading hierarchy — this also enables anchor links.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the outermost container.
+</ParamField>
+
+### Steps.Item
+
+<ParamField path="title" type="string | ReactNode" required>
+  The step's heading text. Use a plain string for anchor link support. You can pass a `ReactNode` for custom styling, but anchor generation requires a string.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The body content of the step. Supports any rich content — paragraphs, code blocks, callouts, nested lists, and other components.
+</ParamField>
+
+<ParamField path="stepNumber" type="number | string">
+  Override the auto-assigned step number. The parent `Steps` component sets this automatically, but you can override it when building custom sequences.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode | string">
+  Replace the step number with an icon. Pass a FontAwesome icon name string (e.g. `"rocket"`) or any React node. When an icon is provided, the number is hidden.
+</ParamField>
+
+<ParamField path="iconType" type='"solid" | "regular" | "brands" | "duotone" | "light" | "thin"'>
+  FontAwesome icon style. Only used when `icon` is a string.
+</ParamField>
+
+<ParamField path="iconLibrary" type='"fontawesome" | "lucide"'>
+  Icon library to use when `icon` is a string. Defaults to FontAwesome.
+</ParamField>
+
+<ParamField path="titleSize" type='"p" | "h2" | "h3" | "h4"'>
+  Override the heading element for this specific step. Inherits from the parent `Steps.titleSize` when not set.
+</ParamField>
+
+<ParamField path="id" type="string">
+  A custom ID for the step element. When `titleSize` is `"h2"` or `"h3"`, this ID is used to generate an anchor link. Required for anchor link functionality.
+</ParamField>
+
+<ParamField path="noAnchor" type="boolean">
+  Disable the anchor link for this step even when it would otherwise be enabled. Useful when you have an `id` for programmatic purposes but don't want a user-visible link icon.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes applied to the step container.
+</ParamField>
+
+## Examples
+
+### With icons
+
+Replace step numbers with icons to communicate the purpose of each step at a glance.
+
+```tsx
+<Steps>
+  <Steps.Item title="Create an account" icon="user-plus" iconType="solid">
+    Visit [mintlify.com](https://mintlify.com) and sign up for a free account.
+  </Steps.Item>
+  <Steps.Item title="Connect your repository" icon="code-branch" iconType="solid">
+    Link your GitHub or GitLab repository to sync your docs automatically.
+  </Steps.Item>
+  <Steps.Item title="Deploy your docs" icon="rocket" iconType="solid">
+    Push to your main branch — Mintlify deploys your docs automatically.
+  </Steps.Item>
+</Steps>
+```
+
+### With heading-level titles
+
+Set `titleSize` to `"h2"` or `"h3"` to include step titles in the page's heading hierarchy. Combined with `id`, each step also gets a clickable anchor link in the number badge.
+
+<Steps titleSize="h2">
+  <Steps.Item id="installation" title="Installation">
+    Install the package with your preferred package manager.
+
+    ```bash
+    npm install @mintlify/components
+    ```
+  </Steps.Item>
+  <Steps.Item id="configuration" title="Configuration">
+    Add the component library to your Tailwind config.
+
+    ```js
+    // tailwind.config.js
+    module.exports = {
+      content: ['./node_modules/@mintlify/components/dist/**/*.js'],
+    };
+    ```
+  </Steps.Item>
+  <Steps.Item id="usage" title="Usage">
+    Import and use components in your MDX pages.
+
+    ```tsx
+    import { Callout } from '@mintlify/components';
+    ```
+  </Steps.Item>
+</Steps>
+
+<Tip>
+  Anchor links only appear when `titleSize` is `"h2"` or `"h3"` **and** the item has an `id` prop. Clicking the step's number badge copies the direct URL to that step.
+</Tip>
+
+### Rich step content
+
+Each step can contain any mix of components — callouts, code blocks, sub-lists, and even other Mintlify components.
+
+<Steps>
+  <Steps.Item title="Set your environment variables">
+    Create a `.env` file in the project root:
+
+    ```bash
+    MINTLIFY_API_KEY=mk_live_...
+    MINTLIFY_ORG=your-org-slug
+    ```
+
+    <Warning>
+      Never commit your `.env` file to version control. Add it to `.gitignore`.
+    </Warning>
+  </Steps.Item>
+
+  <Steps.Item title="Verify the connection">
+    Run the following command. You should see a success message:
+
+    ```bash
+    mintlify whoami
+    ```
+  </Steps.Item>
+
+  <Steps.Item title="Publish your first update">
+    Commit your changes and push to the main branch. Your docs site updates within seconds.
+  </Steps.Item>
+</Steps>
+
+### Custom title size per step
+
+You can mix title sizes within a single `Steps` component by setting `titleSize` on individual items.
+
+```tsx
+<Steps>
+  <Steps.Item title="Quick prerequisites" titleSize="h3">
+    Node.js 18+ and Git must be installed.
+  </Steps.Item>
+  <Steps.Item title="Install and configure" titleSize="h3">
+    Run the setup wizard and follow the prompts.
+  </Steps.Item>
+  <Steps.Item title="Done!" titleSize="p">
+    Your environment is ready.
+  </Steps.Item>
+</Steps>
+```
+
+### Disabling an anchor on a specific step
+
+If you need an `id` for scripting purposes but don't want the anchor link UI, add `noAnchor`.
+
+```tsx
+<Steps titleSize="h2">
+  <Steps.Item id="step-one" title="Step one">
+    Normal step with anchor link.
+  </Steps.Item>
+  <Steps.Item id="step-two" noAnchor title="Step two">
+    This step has an ID but no visible anchor icon.
+  </Steps.Item>
+</Steps>
+```
+
+## Connector line
+
+`Steps` renders a vertical connector line between each item. On the last step the line fades out with a gradient. The line is hidden automatically if the last step's content area is empty.
+
+## Auto-numbering
+
+Step numbers are assigned by position — the first `Steps.Item` is `1`, the second is `2`, and so on. You can override any individual step's number with the `stepNumber` prop. The override doesn't affect the numbering of sibling steps.
+
+## Dark mode
+
+`Steps` and `Steps.Item` use Tailwind `dark:` classes for the connector line, number badges, and title colors. No additional setup is required.
