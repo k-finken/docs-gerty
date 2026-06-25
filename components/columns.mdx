@@ -1,5 +1,5 @@
 ---
-title: "Columns: Responsive Multi-Column Grid Layouts"
+title: "Columns: Responsive Multi-Column Layouts for Content"
 sidebarTitle: "Columns"
 description: "Arrange content into 1–4 equal-width columns with container-query responsiveness. Collapses to a single column automatically on narrow containers."
 ---
@@ -146,38 +146,19 @@ Use `className` to override the default `gap-4` spacing between columns.
 ## Responsive behaviour
 
 <Note>
-  Responsive behaviour is driven by **CSS container queries**, not viewport width. The column count adapts to the width of the nearest container, not the browser window.
+  When a container context is present in the ancestor tree, responsive behaviour is driven by **CSS container queries** rather than viewport width, so `Columns` adapts to the width of its containing element rather than the browser window.
 </Note>
 
-`Columns` uses the Tailwind `@container` plugin so it responds to the **container** it lives inside rather than the viewport. This makes it reliable in sidebars, modals, and any layout where the content area is narrower than the full screen.
+`Columns` uses CSS container queries when a named container context is available in the ancestor tree, making it reliable inside sidebars, modals, and any layout where the content area is narrower than the full screen. A `sm:` viewport-width breakpoint serves as a fallback when no container context is present. Most Mintlify-based layouts provide the container context automatically, so `Columns` responds correctly without any extra wrapper from you.
 
-The breakpoint thresholds are:
+The container-query breakpoint thresholds are:
 
 | Container width | Rendered columns |
 |---|---|
-| Less than `@2xl` (~42 rem) | 1 column |
+| Less than `@2xl` (~42 rem / 672 px) | 1 column |
 | `@2xl` and above | `cols` value |
 
-This means a `<Columns cols={3}>` block collapses to a single column automatically when its parent container is too narrow to comfortably fit three items.
-
-### Container query example
-
-Wrap `Columns` in a container query context to control responsive behaviour manually:
-
-```jsx
-{/* The parent must carry the @container/columns-container class name */}
-<div className="@container/columns-container">
-  <Columns cols={3}>
-    <Card title="Alpha" icon="a" href="/alpha" />
-    <Card title="Beta" icon="b" href="/beta" />
-    <Card title="Gamma" icon="g" href="/gamma" />
-  </Columns>
-</div>
-```
-
-<Note>
-  The `@container/columns-container` class name is the container query identifier that `Columns` targets internally. If you nest `Columns` inside any element that already carries this class, the breakpoint logic applies automatically.
-</Note>
+A `<Columns cols={3}>` block therefore collapses to a single column automatically when its parent container is too narrow to comfortably fit three items.
 
 ### Practical layout example with `Steps`
 

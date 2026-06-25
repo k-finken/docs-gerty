@@ -47,7 +47,7 @@ import { Mermaid } from '@mintlify/components';
 </ParamField>
 
 <ParamField path="actions" type="boolean">
-  When `true`, forces the pan/zoom toolbar to appear even if the diagram is not tall enough to trigger it automatically. Defaults to `false`.
+  Controls the pan/zoom toolbar visibility. When `true`, the toolbar is always shown. When `false`, the toolbar is always hidden. When omitted, the toolbar appears automatically for diagrams that exceed a minimum height threshold.
 </ParamField>
 
 <ParamField path="placement" type="'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'">

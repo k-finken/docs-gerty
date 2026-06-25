@@ -1,5 +1,5 @@
 ---
-title: "CodeBlock: Syntax-Highlighted Code Snippets"
+title: "CodeBlock: Syntax-Highlighted Code Snippets in MDX"
 sidebarTitle: "CodeBlock"
 description: "Render syntax-highlighted code with a copy button, optional filename header, line numbers, line highlighting, focus mode, and expandable long snippets."
 ---
@@ -221,12 +221,12 @@ Every `CodeBlock` automatically extracts the code text from its children and wir
 
 ## Diff highlighting
 
-Lines prefixed with `+` or `-` inside a code block automatically receive diff-style coloring — green for additions, red for removals — without any extra props.
+Add `// [!code ++]` or `// [!code --]` as an inline comment on any line to mark it as an addition or removal. The line receives green or red diff-style coloring automatically — no extra props needed.
 
 ```tsx
 <CodeBlock language="javascript" filename="app.js">
-  {`- const port = 3000;
-+ const port = process.env.PORT ?? 3000;`}
+  {`const port = 3000; // [!code --]
+const port = process.env.PORT ?? 3000; // [!code ++]`}
 </CodeBlock>
 ```
 

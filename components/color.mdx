@@ -21,11 +21,11 @@ import { Color } from '@mintlify/components';
 ## Basic Usage
 
 ```tsx
-<Color>
-  <Color.Row label="Brand">
-    <Color.Item value="#0069ED" label="Brand Blue" />
-    <Color.Item value="#00C853" label="Brand Green" />
-    <Color.Item value="#FF3D00" label="Brand Red" />
+<Color variant="compact">
+  <Color.Row title="Brand">
+    <Color.Item value="#0069ED" name="Brand Blue" />
+    <Color.Item value="#00C853" name="Brand Green" />
+    <Color.Item value="#FF3D00" name="Brand Red" />
   </Color.Row>
 </Color>
 ```
@@ -36,12 +36,12 @@ import { Color } from '@mintlify/components';
 
 ### Color (root)
 
-<ParamField path="children" type="ReactNode" required>
-  One or more `Color.Row` components.
+<ParamField path="variant" type="'compact' | 'table'" required>
+  Layout variant. `compact` renders a flowing grid of swatches; `table` renders a structured table with columns for the swatch, name, and hex value, plus a Tooltip on hover.
 </ParamField>
 
-<ParamField path="variant" type="'compact' | 'table'">
-  Layout variant. `compact` renders a flowing grid of swatches; `table` renders a structured table with columns for the swatch, label, and hex value, plus a Tooltip on hover. Defaults to `compact`.
+<ParamField path="children" type="ReactNode" required>
+  One or more `Color.Row` components.
 </ParamField>
 
 ---
@@ -52,7 +52,7 @@ import { Color } from '@mintlify/components';
   One or more `Color.Item` components to display in this row.
 </ParamField>
 
-<ParamField path="label" type="string">
+<ParamField path="title" type="string">
   An optional row label displayed to the left of the swatch group. Useful for grouping related colors under a category name such as "Primary" or "Neutral".
 </ParamField>
 
@@ -64,12 +64,8 @@ import { Color } from '@mintlify/components';
   The color value to display and copy. Pass a plain hex string (e.g. `#0069ED`) for a static color, or pass an object with `light` and `dark` hex strings for theme-aware colors. The displayed swatch adapts to the current color scheme.
 </ParamField>
 
-<ParamField path="label" type="string">
-  A human-readable name for this color, shown beneath the swatch or in the table column.
-</ParamField>
-
-<ParamField path="className" type="string">
-  Additional CSS class names to apply to the swatch container.
+<ParamField path="name" type="string">
+  A human-readable name for this color, shown beneath the swatch in compact mode or in the table column.
 </ParamField>
 
 ---
@@ -78,19 +74,19 @@ import { Color } from '@mintlify/components';
 
 ### Compact Layout (default)
 
-The default `compact` variant renders swatches in a responsive grid. Labels appear below each swatch.
+The `compact` variant renders swatches in a responsive grid. Names appear below each swatch.
 
 ```tsx
-<Color>
-  <Color.Row label="Primary">
-    <Color.Item value="#0069ED" label="Blue 500" />
-    <Color.Item value="#3B82F6" label="Blue 400" />
-    <Color.Item value="#93C5FD" label="Blue 200" />
+<Color variant="compact">
+  <Color.Row title="Primary">
+    <Color.Item value="#0069ED" name="Blue 500" />
+    <Color.Item value="#3B82F6" name="Blue 400" />
+    <Color.Item value="#93C5FD" name="Blue 200" />
   </Color.Row>
-  <Color.Row label="Neutral">
-    <Color.Item value="#111827" label="Gray 900" />
-    <Color.Item value="#6B7280" label="Gray 500" />
-    <Color.Item value="#F3F4F6" label="Gray 100" />
+  <Color.Row title="Neutral">
+    <Color.Item value="#111827" name="Gray 900" />
+    <Color.Item value="#6B7280" name="Gray 500" />
+    <Color.Item value="#F3F4F6" name="Gray 100" />
   </Color.Row>
 </Color>
 ```
@@ -101,15 +97,15 @@ The `table` variant adds column headers and a Tooltip showing the hex value when
 
 ```tsx
 <Color variant="table">
-  <Color.Row label="Danger">
-    <Color.Item value="#DC2626" label="Red 600" />
-    <Color.Item value="#EF4444" label="Red 500" />
-    <Color.Item value="#FCA5A5" label="Red 300" />
+  <Color.Row title="Danger">
+    <Color.Item value="#DC2626" name="Red 600" />
+    <Color.Item value="#EF4444" name="Red 500" />
+    <Color.Item value="#FCA5A5" name="Red 300" />
   </Color.Row>
-  <Color.Row label="Success">
-    <Color.Item value="#16A34A" label="Green 600" />
-    <Color.Item value="#22C55E" label="Green 500" />
-    <Color.Item value="#86EFAC" label="Green 300" />
+  <Color.Row title="Success">
+    <Color.Item value="#16A34A" name="Green 600" />
+    <Color.Item value="#22C55E" name="Green 500" />
+    <Color.Item value="#86EFAC" name="Green 300" />
   </Color.Row>
 </Color>
 ```
@@ -123,40 +119,40 @@ The `table` variant adds column headers and a Tooltip showing the hex value when
 Pass an object with `light` and `dark` keys to display different values depending on the user's color scheme. The swatch automatically switches when the theme changes.
 
 ```tsx
-<Color>
-  <Color.Row label="Background">
+<Color variant="compact">
+  <Color.Row title="Background">
     <Color.Item
       value={{ light: '#FFFFFF', dark: '#0A0A0A' }}
-      label="Canvas"
+      name="Canvas"
     />
     <Color.Item
       value={{ light: '#F9FAFB', dark: '#111827' }}
-      label="Surface"
+      name="Surface"
     />
   </Color.Row>
-  <Color.Row label="Text">
+  <Color.Row title="Text">
     <Color.Item
       value={{ light: '#111827', dark: '#F9FAFB' }}
-      label="Primary"
+      name="Primary"
     />
     <Color.Item
       value={{ light: '#6B7280', dark: '#9CA3AF' }}
-      label="Muted"
+      name="Muted"
     />
   </Color.Row>
 </Color>
 ```
 
-### Single Row Without a Label
+### Single Row Without a Title
 
-You can omit the `label` on `Color.Row` for an unlabeled swatch group:
+You can omit the `title` on `Color.Row` for an unlabeled swatch group:
 
 ```tsx
-<Color>
+<Color variant="compact">
   <Color.Row>
-    <Color.Item value="#8B5CF6" label="Violet" />
-    <Color.Item value="#A78BFA" label="Violet Light" />
-    <Color.Item value="#DDD6FE" label="Violet Pale" />
+    <Color.Item value="#8B5CF6" name="Violet" />
+    <Color.Item value="#A78BFA" name="Violet Light" />
+    <Color.Item value="#DDD6FE" name="Violet Pale" />
   </Color.Row>
 </Color>
 ```
@@ -175,7 +171,7 @@ Clicking any `Color.Item` copies the hex value to the clipboard. The swatch show
 
 ## Accessibility
 
-- Each `Color.Item` swatch is an interactive element that responds to keyboard activation.
-- The `label` prop provides a visible text alternative alongside the color swatch.
+- Each `Color.Item` swatch is an interactive button that responds to keyboard activation.
+- The `name` prop provides a visible text alternative alongside the color swatch.
 - In the `table` variant, the Tooltip supplements the visual swatch with a readable hex string on hover.
 - Theme-aware swatches reflect the current `prefers-color-scheme` media query, ensuring users always see the color relevant to their context.

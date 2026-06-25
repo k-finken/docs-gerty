@@ -1,5 +1,5 @@
 ---
-title: "Card: Linked Content Blocks with Icons and CTAs"
+title: "Card: Navigable Content Blocks with Icons and CTAs"
 sidebarTitle: "Card"
 description: "Navigable content blocks with icons, header images, and CTAs. Cards auto-detect external links, open them in a new tab, and highlight on hover."
 ---
@@ -30,8 +30,8 @@ import { Card } from '@mintlify/components'
 
 ## Props
 
-<ParamField path="title" type="ReactNode">
-  The heading text rendered inside the card. Prefer a plain string for the best accessibility and semantic markup.
+<ParamField path="title" type="string | ReactNode">
+  The heading text rendered inside the card. Use a plain string for the best accessibility and semantic markup. ReactNode is accepted for advanced cases but a string is strongly preferred.
 </ParamField>
 
 <ParamField path="icon" type="ReactNode | string">
@@ -286,6 +286,6 @@ import { Card, Columns } from '@mintlify/components'
 
 **External URL detection** — The card checks whether `href` starts with `http://` or `https://`. When it does, the rendered `<a>` element automatically receives `target="_blank"` and `rel="noreferrer"`, and the `ArrowUpRight` icon appears in the corner. Internal paths (e.g. `/guides/setup`) do not trigger this behaviour.
 
-**Hover state** — When the card has an `href`, hovering highlights the border in your theme's primary colour (`border-primary` / `dark:border-primary-light`). The icon in the corner also transitions to the primary colour, reinforcing that the card is interactive.
+**Hover state** — When the card has an `href`, hovering highlights the border in your theme's primary colour. In dark mode the border shifts to the `primary-light` token. The corner icon also transitions to the primary colour, reinforcing that the card is interactive.
 
 **Dark mode** — All colour tokens use Tailwind's `dark:` variant, so the card adapts automatically when the user's system or site theme switches to dark mode. No extra configuration is required.

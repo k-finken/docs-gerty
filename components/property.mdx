@@ -55,11 +55,11 @@ import { Property } from '@mintlify/components';
   When `true`, the entire component renders nothing (`null`). Use this to conditionally hide a property without removing it from your source.
 </ParamField>
 
-<ParamField path="default" type="string">
-  The default value shown in the parameter head when no value is provided by the caller.
+<ParamField path="default" type="unknown">
+  The default value shown in the parameter head when no value is provided by the caller. Accepts any serializable value — strings, numbers, booleans, and simple objects.
 </ParamField>
 
-<ParamField path="children" type="ReactNode" required>
+<ParamField path="children" type="ReactNode">
   The description body. Supports any React content including markdown prose, code blocks, and nested components.
 </ParamField>
 
@@ -67,36 +67,36 @@ import { Property } from '@mintlify/components';
   An HTML `id` attribute applied to the property container, enabling direct anchor links.
 </ParamField>
 
-<ParamField path="pre" type="ReactNode">
-  Content rendered immediately before the parameter head — useful for custom dividers or grouping labels.
+<ParamField path="pre" type="string[]">
+  An array of strings rendered immediately before the parameter head — useful for custom dividers or grouping labels.
 </ParamField>
 
-<ParamField path="post" type="ReactNode">
-  Content rendered immediately after the description body.
+<ParamField path="post" type="string[]">
+  An array of strings rendered immediately after the description body.
 </ParamField>
 
 <ParamField path="className" type="string">
   Additional CSS class names applied to the root container.
 </ParamField>
 
-<ParamField path="onMount" type="(id: string) => void">
-  Callback invoked on mount, receiving the `id` prop. Useful for registering the property in a navigation index.
+<ParamField path="onMount" type="() => void">
+  Callback invoked once when the component mounts.
 </ParamField>
 
 <ParamField path="navigateToHeaderAriaLabel" type="string">
-  Custom `aria-label` for the "link to this section" anchor icon shown on hover.
+  Custom `aria-label` for the "link to this section" anchor icon shown on hover. Defaults to `"Navigate to header"`.
 </ParamField>
 
 <ParamField path="defaultLabel" type="string">
-  Custom label text for the default value badge. Defaults to `"Default"`.
+  Custom label text for the default value badge. Defaults to `"default"`.
 </ParamField>
 
 <ParamField path="requiredLabel" type="string">
-  Custom label text for the required badge. Defaults to `"Required"`.
+  Custom label text for the required badge. Defaults to `"required"`.
 </ParamField>
 
 <ParamField path="deprecatedLabel" type="string">
-  Custom label text for the deprecated badge. Defaults to `"Deprecated"`.
+  Custom label text for the deprecated badge. Defaults to `"deprecated"`.
 </ParamField>
 
 ---
@@ -115,7 +115,7 @@ import { Property } from '@mintlify/components';
 ### Optional Parameter with Default
 
 ```tsx
-<Property name="page_size" type="integer" default="20">
+<Property name="page_size" type="integer" default={20}>
   Number of results to return per page. Must be between `1` and `100`.
 </Property>
 ```
@@ -182,7 +182,7 @@ Set `hidden` to conditionally remove a field from the rendered output without de
 
 ```tsx
 <Property name="internal_trace_id" type="string" hidden>
-  Internal tracing identifier — not exposed to end users.
+  Internal tracing identifier.
 </Property>
 ```
 

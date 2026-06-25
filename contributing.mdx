@@ -1,5 +1,5 @@
 ---
-title: "Contribute to Mintlify Components Open Source"
+title: "Contributing to Mintlify Components: Developer Guide"
 sidebarTitle: "Contributing"
 description: "Learn how to contribute to the @mintlify/components open-source library — filing issues, submitting pull requests, and running locally."
 ---
@@ -96,7 +96,7 @@ You need the following tools installed before you begin:
 
 ## Project structure
 
-```
+```text
 packages/
 └── components/           # Main component package
     ├── src/
@@ -126,7 +126,7 @@ packages/
   </Step>
 
   <Step title="Write a Storybook story">
-    Document usage with at least one story under `packages/components/.storybook/`. Stories double as interactive demos and regression-test fixtures.
+    Add a `<component-name>.stories.tsx` file alongside your component source in `packages/components/src/components/<your-component>/`. Stories double as interactive demos and regression-test fixtures.
   </Step>
 
   <Step title="Build and verify">

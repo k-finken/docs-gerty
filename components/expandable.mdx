@@ -52,8 +52,8 @@ import { Expandable } from '@mintlify/components';
   Callback invoked when the section closes.
 </ParamField>
 
-<ParamField path="onMount" type="(open: boolean) => void">
-  Callback invoked once on mount with the initial open state.
+<ParamField path="onMount" type="() => void">
+  Callback invoked once on mount.
 </ParamField>
 
 <ParamField path="lazy" type="boolean">
@@ -157,7 +157,7 @@ Use `lazy` when the content inside is expensive to mount. The children will not 
 Pass an `anchor` string to automatically open the section when the page URL hash matches. This is useful for deep-linking to a specific nested field:
 
 ```tsx
-// Opens automatically when the URL contains #webhook-payload
+{/* Opens automatically when the URL contains #webhook-payload */}
 <Expandable title="Webhook payload" anchor="webhook-payload">
   Detailed breakdown of the webhook event body.
 </Expandable>

@@ -1,5 +1,5 @@
 ---
-title: "Tile: Visual Link Cards for Component Galleries"
+title: "Tile: Visual Link Cards for Galleries and Catalogues"
 sidebarTitle: "Tile"
 description: "Clickable visual previews with a 170 px illustration area and plus-sign grid background. Ideal for component catalogues and integration directories."
 ---
@@ -39,7 +39,7 @@ import { Tile } from '@mintlify/components'
 </ParamField>
 
 <ParamField path="title" type="string">
-  The primary label displayed below the illustration. Rendered in semibold text and truncated with an ellipsis if it overflows the tile width. The full string appears in the native tooltip on hover.
+  The primary label displayed below the illustration. Rendered in medium-weight text and truncated with an ellipsis if it overflows the tile width. The full string appears in the native tooltip on hover.
 </ParamField>
 
 <ParamField path="description" type="string">
@@ -216,6 +216,6 @@ If your component has visually distinct light and dark designs, show both by ren
 
 **Text truncation** — Both `title` and `description` use `text-overflow: ellipsis` and `max-width: 100%`. The full string is always accessible via the native `title` attribute on the `<p>` element, which most browsers surface as a tooltip.
 
-**External link detection** — The same `isRemoteUrl` utility used by `Card` applies here. Any `href` with an `http://` or `https://` protocol receives `target="_blank"` and `rel="noreferrer"` automatically.
+**External link detection** — The same external-URL detection used by `Card` applies here. Any `href` with an `http://` or `https://` protocol receives `target="_blank"` and `rel="noreferrer"` automatically.
 
 **Dark mode** — The tile background (`bg-stone-50` / `dark:bg-stone-900`), the side-edge fade overlays, and the text colours all adapt to the active theme with no configuration required.

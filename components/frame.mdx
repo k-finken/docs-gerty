@@ -47,7 +47,7 @@ import { Frame } from '@mintlify/components'
 </ParamField>
 
 <ParamField path="as" type='"div"'>
-  The HTML element used for the inner frame container. Currently only `"div"` is supported.
+  The HTML element used for the inner frame container. Only `"div"` is supported. The default is `"div"`, so you can omit this prop entirely.
 </ParamField>
 
 <ParamField path="style" type="CSSProperties">
@@ -77,7 +77,7 @@ Wrap any image to lift it off the page and provide a consistent visual treatment
 
 ### Frame with a title
 
-Add a title header to orient the reader before they look at the image. The header includes a small decorative icon drawn from the component's internal SVG — no extra configuration needed.
+Add a title header to orient the reader before they look at the image. The header includes a small decorative icon automatically — no extra configuration needed.
 
 ```jsx
 <Frame title="Project settings panel">
@@ -168,7 +168,7 @@ When your caption needs more than plain text, pass a `renderDescription` functio
 </Tabs>
 
 <Note>
-  `Frame` automatically calls `enhanceVideoProps` on its children. This adds sensible defaults (such as `playsInline`) to `<video>` elements to prevent unexpected full-screen behaviour on iOS and other mobile browsers.
+  `Frame` automatically calls `enhanceVideoProps` on its children. When a `<video>` element has `autoPlay` set, `enhanceVideoProps` also sets `playsInline`, `loop`, and `muted` — preventing unexpected full-screen takeovers on iOS and ensuring autoplay works across browsers without sound.
 </Note>
 
 ### Controlling dimensions with `style`
@@ -210,6 +210,6 @@ import { Frame, Columns } from '@mintlify/components'
 
 **Dark mode** — All surface colours (background, border, description text) flip automatically with the user's theme. You don't need to add any `dark:` classes yourself.
 
-**Content centring** — The inner content wrapper uses `flex` with `justify-center` and `items-center`, so your content is always horizontally centred regardless of its intrinsic size. If you need content to stretch to fill the frame, add `className="w-full"` to the element inside.
+**Content centring** — The inner content wrapper uses `flex` with `justify-center`, so your content is always horizontally centred regardless of its intrinsic size. If you need content to stretch to fill the frame, add `className="w-full"` to the element inside.
 
 **Overflow clipping** — The inner wrapper clips overflow with `overflow-hidden` and applies `rounded-xl`. Images and videos with dimensions larger than the frame are cropped cleanly at the border radius.

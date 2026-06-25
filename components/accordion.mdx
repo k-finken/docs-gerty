@@ -1,5 +1,5 @@
 ---
-title: "Accordion: Collapsible Content Sections"
+title: "Accordion: Collapsible Content Sections for Your Docs"
 sidebarTitle: "Accordion"
 description: "Display collapsible sections that expand on click. Group multiple accordions together and sync open state to the URL for shareable deep links."
 ---
@@ -62,6 +62,14 @@ Each `Accordion` requires a `title` and `defaultOpen` prop. Place any content â€
 
 <ParamField path="trackClose" type="(event: { title: string }) => void">
   Callback fired when the accordion is closed. Receives the accordion's title string.
+</ParamField>
+
+<ParamField path="getInitialOpenFromUrl" type="(id: string, parentIds: string[]) => boolean">
+  Called on mount to determine whether the accordion should open based on the current URL hash. Pass the function returned by the `getInitialOpenState()` helper exported from `@mintlify/components`. Only works when `title` is a plain string.
+</ParamField>
+
+<ParamField path="onUrlStateChange" type="(isOpen: boolean, id: string | undefined, parentIds: string[]) => void">
+  Called whenever the accordion opens or closes, so you can update the URL hash to reflect the new state. Pass the function returned by the `updateAndCopyUrl()` helper exported from `@mintlify/components`. Only works when `title` is a plain string.
 </ParamField>
 
 ### Accordion.Group

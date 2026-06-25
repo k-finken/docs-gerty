@@ -63,20 +63,20 @@ import { Badge } from '@mintlify/components';
   When provided (and no `href`), the badge renders as a `<button>` element.
 </ParamField>
 
-<ParamField path="leadIcon" type="string">
-  Name of an icon to render before the children text.
+<ParamField path="leadIcon" type="ReactNode">
+  An icon to render before the children. Pass a string to use a named icon from the configured icon library, or pass a React element for a custom inline icon.
 </ParamField>
 
-<ParamField path="tailIcon" type="string">
-  Name of an icon to render after the children text.
+<ParamField path="tailIcon" type="ReactNode">
+  An icon to render after the children. Pass a string to use a named icon from the configured icon library, or pass a React element for a custom inline icon.
 </ParamField>
 
-<ParamField path="iconType" type="string">
-  Style of the icon (e.g. `solid`, `regular`). Passed to the icon library.
+<ParamField path="iconType" type="'brands' | 'duotone' | 'light' | 'regular' | 'sharp-duotone-solid' | 'sharp-light' | 'sharp-regular' | 'sharp-solid' | 'sharp-thin' | 'solid' | 'thin'">
+  The style variant of the icon when `leadIcon` or `tailIcon` is a string name. Defaults to `regular`.
 </ParamField>
 
-<ParamField path="iconLibrary" type="string">
-  The icon library to source icons from.
+<ParamField path="iconLibrary" type="'fontawesome' | 'lucide'">
+  The icon library to source icons from when `leadIcon` or `tailIcon` is a string name. Defaults to `fontawesome`.
 </ParamField>
 
 <ParamField path="className" type="string">
@@ -133,10 +133,10 @@ All available color values:
 Pass an `onClick` handler to create a clickable button badge, or pass an `href` to create a link badge:
 
 ```tsx
-// Button badge
+{/* Button badge */}
 <Badge color="blue" onClick={() => alert('clicked!')}>Click me</Badge>
 
-// Link badge
+{/* Link badge */}
 <Badge color="orange" href="/changelog">Changelog</Badge>
 ```
 
@@ -169,4 +169,4 @@ Pass an `onClick` handler to create a clickable button badge, or pass an `href` 
 - When `href` is set, the badge renders as a native `<a>` element, inheriting all browser link semantics.
 - When `onClick` is set, the badge renders as a `<button>`, which is keyboard-focusable and activatable via <kbd>Enter</kbd> and <kbd>Space</kbd> by default.
 - When `disabled` is set, the badge renders as a `<span>` with `pointer-events: none`, effectively removing it from the tab order and preventing interaction.
-- Icons are decorative and should be hidden from screen readers with `aria-hidden`.
+- String icons are decorative and are hidden from screen readers automatically.

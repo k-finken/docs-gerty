@@ -30,12 +30,12 @@ import { Tooltip } from '@mintlify/components';
 
 ## Props
 
-<ParamField path="description" type="string" required>
-  The main body text of the tooltip popup. Displayed in a muted, small font.
+<ParamField path="children" type="ReactNode" required>
+  The element that triggers the tooltip. Plain text nodes and `<span>` elements receive a dotted underline to signal interactivity. Interactive elements such as `<button>`, `<a>`, and `<input>` are used directly as the trigger without adding an extra wrapper.
 </ParamField>
 
-<ParamField path="children" type="ReactNode" required>
-  The element that triggers the tooltip. Plain text nodes and `<span>` elements receive a dotted underline to signal interactivity. Interactive elements such as `<button>`, `<a>`, and `<input>` are used directly as the trigger without an extra wrapper (via `renderAsChild`).
+<ParamField path="description" type="string">
+  The main body text of the tooltip popup. Displayed in a muted, small font.
 </ParamField>
 
 <ParamField path="title" type="string">
@@ -114,7 +114,7 @@ When the child is a `<button>`, `<a>`, or `<input>`, the tooltip attaches direct
 ```
 
 <Note>
-  Interactive children render using `renderAsChild`, meaning the tooltip trigger IS the button or link. This preserves native focus styles and avoids invalid HTML nesting.
+  When the child is an interactive element such as a button or link, the tooltip trigger IS that element. This preserves native focus styles and avoids invalid HTML nesting.
 </Note>
 
 ### Positioning
@@ -122,12 +122,12 @@ When the child is a `<button>`, `<a>`, or `<input>`, the tooltip attaches direct
 Control which side the popup prefers to open on:
 
 ```tsx
-// Appears below the trigger
+{/* Appears below the trigger */}
 <Tooltip side="bottom" description="This value is auto-calculated.">
   <span>computed_at</span>
 </Tooltip>
 
-// Appears to the right, aligned to the start
+{/* Appears to the right, aligned to the start */}
 <Tooltip side="right" align="start" description="ISO 8601 timestamp.">
   <span>created_at</span>
 </Tooltip>
@@ -182,7 +182,7 @@ On touch devices, the tooltip toggles on tap rather than hover. A second tap dis
 
 ## Accessibility
 
-- The tooltip popup is built on `@base-ui-react/tooltip`, which manages `aria-describedby` linking between the trigger and the popup content automatically.
+- The tooltip popup manages `aria-describedby` linking between the trigger and the popup content automatically.
 - Plain-text triggers receive a visible dotted underline to communicate interactivity to sighted users.
 - On touch devices, the tap-to-toggle behaviour means touch users can always access tooltip content without requiring hover capability.
 - The `title` prop inside the popup is announced as part of the accessible description, giving screen reader users additional context.
